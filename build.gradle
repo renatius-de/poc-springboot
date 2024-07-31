@@ -31,6 +31,7 @@ repositories {
 }
 
 ext {
+    set('arcMuteSpringPluginVersion', '1.0.0')
     set('jetbrainsAnnotationVersion', '24.0.0')
     set('lombokMapstructBindingVersion', '0.2.0')
     set('mapStructVersion', '1.5.5.Final')
@@ -80,6 +81,8 @@ dependencies {
 
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
+
+    testImplementation "com.arcmutate:arcmutate-spring:${arcMuteSpringPluginVersion}"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
