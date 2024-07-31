@@ -3,6 +3,7 @@ plugins {
     id 'jacoco'
 
     id 'org.sonarqube' version '5.1.0.4882'
+    id 'info.solidsoft.pitest' version '1.15.0'
 
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
@@ -26,10 +27,13 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 ext {
-    set('springCloudVersion', "2023.0.3")
+    set('jetbrainsAnnotationVersion', '24.0.0')
+    set('mapStructVersion', '1.5.5.Final')
+    set('springCloudVersion', '2023.0.3')
 }
 
 dependencies {
@@ -38,6 +42,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation 'org.flywaydb:flyway-core'
@@ -46,16 +51,20 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
     implementation 'org.springframework.session:spring-session-data-redis'
 
+    implementation "org.jetbrains:annotations:${jetbrainsAnnotationVersion}"
+
     compileOnly 'org.projectlombok:lombok'
+    compileOnly "org.mapstruct:mapstruct:${mapStructVersion}"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
     runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
@@ -90,6 +99,12 @@ contracts {
 
 tasks.named('contractTest') {
     useJUnitPlatform()
+}
+
+pitest {
+    pitestVersion.set("1.15.1")
+    targetClasses.set(Set.of("de.renatius.poc.*"))
+    junit5PluginVersion.set("1.2.0")
 }
 
 sonarqube {
