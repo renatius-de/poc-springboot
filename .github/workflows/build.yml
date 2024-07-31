@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [main, master]
   workflow_dispatch:
+permissions:
+  checks: write
 jobs:
   build:
     name: Build
@@ -53,3 +55,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: /language:${{matrix.language}}
+      - name: Publish Pitest Report
+        uses: Bonajo/pitest-report-action@v0.5
+        with:
+          file: '**/pitest/mutations.xml'

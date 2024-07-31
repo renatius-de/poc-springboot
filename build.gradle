@@ -32,6 +32,7 @@ repositories {
 
 ext {
     set('jetbrainsAnnotationVersion', '24.0.0')
+    set('lombokMapstructBindingVersion', '0.2.0')
     set('mapStructVersion', '1.5.5.Final')
     set('springCloudVersion', '2023.0.3')
 }
@@ -63,7 +64,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -102,15 +104,18 @@ tasks.named('contractTest') {
 }
 
 pitest {
-    pitestVersion.set("1.15.1")
-    targetClasses.set(Set.of("de.renatius.poc.*"))
-    junit5PluginVersion.set("1.2.0")
+    junit5PluginVersion = '1.2.0'
+    outputFormats = ['XML', 'HTML']
+}
+
+tasks.named('check') {
+    dependsOn('pitest')
 }
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "renatius-de_poc-quarkus"
-        property "sonar.organization", "renatius-de"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.projectKey', 'renatius-de_poc-quarkus'
+        property 'sonar.organization', 'renatius-de'
+        property 'sonar.host.url', 'https://sonarcloud.io'
     }
 }
