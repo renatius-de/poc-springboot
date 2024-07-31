@@ -1,6 +1,6 @@
 package de.renatius.poc.springboot;
 
-import de.renatius.poc.springboot.configuration.TestcontainersConfiguration;
+import de.renatius.poc.springboot.persistence.configuration.TestcontainersConfiguration;
 import org.springframework.boot.SpringApplication;
 
 public class TestApplication {

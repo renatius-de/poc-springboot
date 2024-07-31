@@ -1,32 +1,38 @@
 create table courses
 (
-    uid   uuid default gen_random_uuid() not null
+    uid        uuid                     default gen_random_uuid() not null
         constraint pk__courses
             primary key,
-    title varchar(1023)                  not null
+    title      varchar(1023)                                      not null,
+    created_at timestamp with time zone default now()             not null,
+    updated_at timestamp with time zone default now()             not null
 );
 
 create table professors
 (
-    uid         uuid default gen_random_uuid() not null
+    uid         uuid                     default gen_random_uuid() not null
         constraint pk__professors
             primary key,
-    firstname   varchar(1023)                  not null,
+    firstname   varchar(1023)                                      not null,
     middle_name varchar(1023),
-    surname     varchar(1023)                  not null
+    surname     varchar(1023)                                      not null,
+    created_at  timestamp with time zone default now()             not null,
+    updated_at  timestamp with time zone default now()             not null
 );
 
 create table students
 (
-    uid                  uuid default gen_random_uuid() not null
+    uid                  uuid                     default gen_random_uuid() not null
         constraint pk__students
             primary key,
-    firstname            varchar(1023)                  not null,
+    firstname            varchar(1023)                                      not null,
     middle_name          varchar(1023),
-    lastname             varchar(1023)                  not null,
-    matriculation_number varchar(7)                     not null
+    lastname             varchar(1023)                                      not null,
+    matriculation_number varchar(7)                                         not null
         constraint udx__students__matriculation_number
-            unique
+            unique,
+    created_at           timestamp with time zone default now()             not null,
+    updated_at           timestamp with time zone default now()             not null
 );
 
 create table professors_holds_courses
