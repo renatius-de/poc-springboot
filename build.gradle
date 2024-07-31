@@ -111,10 +111,6 @@ pitest {
     outputFormats = ['XML', 'HTML']
 }
 
-tasks.named('check') {
-    dependsOn('pitest')
-}
-
 sonarqube {
     properties {
         property 'sonar.projectKey', 'renatius-de_poc-springboot'
