@@ -6,17 +6,7 @@ updates:
     schedule:
       interval: weekly
 
-  - package-ecosystem: gradle
+  - package-ecosystem: maven
     directory: /
-    schedule:
-      interval: weekly
-
-  - package-ecosystem: docker
-    directory: /
-    schedule:
-      interval: weekly
-
-  - package-ecosystem: docker
-    directory: /library/src/main/docker
     schedule:
       interval: weekly
