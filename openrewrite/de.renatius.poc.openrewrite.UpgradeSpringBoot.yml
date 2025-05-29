@@ -1,0 +1,10 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: de.renatius.poc.openrewrite.UpgradeSpringBoot
+recipeList:
+  - org.openrewrite.java.migrate.UpgradeToJava21
+
+  - org.openrewrite.java.spring.boot3.SpringBoot33BestPractices
+
+  - org.openrewrite.java.spring.boot3.SpringBootProperties_3_3
+  - org.openrewrite.java.spring.boot3.SpringBootProperties_3_4
+  - org.openrewrite.java.spring.boot3.SpringBootProperties_3_5
