@@ -48,7 +48,7 @@ public class CourseController {
         .body(mapper.toDto(saved));
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public CourseDto getById(@PathVariable UUID id) {
     return mapper.toDto(
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id)));

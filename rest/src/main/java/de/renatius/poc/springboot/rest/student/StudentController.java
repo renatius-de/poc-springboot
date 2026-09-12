@@ -42,7 +42,7 @@ public class StudentController {
         .body(mapper.toDto(saved));
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public StudentDto getById(@PathVariable UUID id) {
     return mapper.toDto(
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", id)));
@@ -76,16 +76,21 @@ public class StudentController {
       @RequestParam(name = "last_name", required = false) String lastName,
       @PageableDefault(sort = {"lastName", "firstName"}, direction = Sort.Direction.ASC)
           Pageable pageable) {
-    Specification<Student> specification =
-        Specification.where(likeIgnoreCase("firstName", firstName))
-            .and(likeIgnoreCase("lastName", lastName));
+    Specification<Student> specification = alwaysTrue();
+    if (firstName != null && !firstName.isBlank()) {
+      specification = specification.and(likeIgnoreCase("firstName", firstName));
+    }
+    if (lastName != null && !lastName.isBlank()) {
+      specification = specification.and(likeIgnoreCase("lastName", lastName));
+    }
     return repository.findAll(specification, pageable).map(mapper::toDto);
   }
 
+  private static Specification<Student> alwaysTrue() {
+    return (root, query, cb) -> cb.conjunction();
+  }
+
   private static Specification<Student> likeIgnoreCase(String field, String value) {
-    if (value == null || value.isBlank()) {
-      return null;
-    }
     return (root, query, cb) -> cb.like(cb.lower(root.get(field)), "%" + value.toLowerCase() + "%");
   }
 

@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 class ProfessorControllerIntegrationTest extends AbstractTestcontainersTest {
 
-  @Autowired private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   @Autowired private ProfessorRepository professorRepository;
 
   @Test
