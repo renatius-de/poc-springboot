@@ -13,13 +13,6 @@
     <artifactId>grpc</artifactId>
     <name>poc-springboot-grpc</name>
 
-    <properties>
-        <grpc.protoc.version>4.31.1</grpc.protoc.version>
-        <grpc.java.version>1.76.0</grpc.java.version>
-        <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
-        <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -6,7 +6,7 @@ option java_multiple_files = true;
 option java_package = "de.renatius.poc.springboot.grpc.v1";
 option java_outer_classname = "AcademicProto";
 
-message PageRequest {
+message SearchPageRequest {
   int32 page = 1;
   int32 size = 2;
   string sort_by = 3;
@@ -47,7 +47,7 @@ message DeleteStudentRequest {
 message SearchStudentsRequest {
   optional string first_name = 1;
   optional string last_name = 2;
-  PageRequest page = 3;
+  optional SearchPageRequest page = 3;
 }
 
 message SearchStudentsResponse {
@@ -89,7 +89,7 @@ message DeleteProfessorRequest {
 message SearchProfessorsRequest {
   optional string first_name = 1;
   optional string last_name = 2;
-  PageRequest page = 3;
+  optional SearchPageRequest page = 3;
 }
 
 message SearchProfessorsResponse {
@@ -130,7 +130,7 @@ message DeleteCourseRequest {
 
 message SearchCoursesRequest {
   optional string name = 1;
-  PageRequest page = 2;
+  optional SearchPageRequest page = 2;
 }
 
 message SearchCoursesResponse {
