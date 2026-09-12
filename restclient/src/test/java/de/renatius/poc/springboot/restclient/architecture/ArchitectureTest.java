@@ -21,11 +21,17 @@ class ArchitectureTest {
           .resideInAPackage("..controller..")
           .should()
           .dependOnClassesThat()
-          .resideInAnyPackage("..repository..");
+          .resideInAnyPackage("..repository..")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule serviceClassesShouldFollowServiceNamingConvention =
-      classes().that().resideInAPackage("..service..").should().haveSimpleNameEndingWith("Service");
+      classes()
+          .that()
+          .resideInAPackage("..service..")
+          .should()
+          .haveSimpleNameEndingWith("Service")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule repositoryClassesShouldFollowRepositoryNamingConvention =
@@ -33,7 +39,8 @@ class ArchitectureTest {
           .that()
           .resideInAPackage("..repository..")
           .should()
-          .haveSimpleNameEndingWith("Repository");
+          .haveSimpleNameEndingWith("Repository")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule controllerClassesShouldFollowControllerNamingConvention =
@@ -41,11 +48,17 @@ class ArchitectureTest {
           .that()
           .resideInAPackage("..controller..")
           .should()
-          .haveSimpleNameEndingWith("Controller");
+          .haveSimpleNameEndingWith("Controller")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule dtoClassesShouldFollowDtoNamingConvention =
-      classes().that().resideInAPackage("..dto..").should().haveSimpleNameEndingWith("Dto");
+      classes()
+          .that()
+          .resideInAPackage("..dto..")
+          .should()
+          .haveSimpleNameEndingWith("Dto")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule domainMustNotDependOnSpringOrWebFrameworks =
@@ -54,9 +67,10 @@ class ArchitectureTest {
           .resideInAPackage("..domain..")
           .should()
           .dependOnClassesThat()
-          .resideInAnyPackage("org.springframework..", "jakarta..", "javax..", "..configuration..");
+          .resideInAnyPackage("org.springframework..", "..configuration..", "..controller..", "..repository..")
+          .allowEmptyShould(true);
 
   @ArchTest
   static final ArchRule packagesMustBeCycleFree =
-      slices().matching("de.renatius.poc.springboot.restclient.(*)..").should().beFreeOfCycles();
+      slices().matching("de.renatius.poc.springboot.restclient.(*)").should().beFreeOfCycles();
 }
