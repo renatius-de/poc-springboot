@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package de.renatius.poc.springboot.grpc.v1;
+
+option java_multiple_files = true;
+option java_package = "de.renatius.poc.springboot.grpc.v1";
+option java_outer_classname = "AcademicProto";
+
+message PageRequest {
+  int32 page = 1;
+  int32 size = 2;
+  string sort_by = 3;
+  SortDirection sort_direction = 4;
+}
+
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASC = 1;
+  SORT_DIRECTION_DESC = 2;
+}
+
+message Student {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message CreateStudentRequest {
+  string first_name = 1;
+  string last_name = 2;
+}
+
+message GetStudentRequest {
+  string id = 1;
+}
+
+message UpdateStudentRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message DeleteStudentRequest {
+  string id = 1;
+}
+
+message SearchStudentsRequest {
+  optional string first_name = 1;
+  optional string last_name = 2;
+  PageRequest page = 3;
+}
+
+message SearchStudentsResponse {
+  repeated Student students = 1;
+  int64 total_elements = 2;
+  int32 total_pages = 3;
+  int32 page = 4;
+  int32 size = 5;
+}
+
+message Professor {
+  string id = 1;
+  string title = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+message CreateProfessorRequest {
+  string title = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message GetProfessorRequest {
+  string id = 1;
+}
+
+message UpdateProfessorRequest {
+  string id = 1;
+  string title = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+message DeleteProfessorRequest {
+  string id = 1;
+}
+
+message SearchProfessorsRequest {
+  optional string first_name = 1;
+  optional string last_name = 2;
+  PageRequest page = 3;
+}
+
+message SearchProfessorsResponse {
+  repeated Professor professors = 1;
+  int64 total_elements = 2;
+  int32 total_pages = 3;
+  int32 page = 4;
+  int32 size = 5;
+}
+
+message Course {
+  string id = 1;
+  string name = 2;
+  string room = 3;
+  string professor_id = 4;
+}
+
+message CreateCourseRequest {
+  string name = 1;
+  string room = 2;
+  string professor_id = 3;
+}
+
+message GetCourseRequest {
+  string id = 1;
+}
+
+message UpdateCourseRequest {
+  string id = 1;
+  string name = 2;
+  string room = 3;
+  string professor_id = 4;
+}
+
+message DeleteCourseRequest {
+  string id = 1;
+}
+
+message SearchCoursesRequest {
+  optional string name = 1;
+  PageRequest page = 2;
+}
+
+message SearchCoursesResponse {
+  repeated Course courses = 1;
+  int64 total_elements = 2;
+  int32 total_pages = 3;
+  int32 page = 4;
+  int32 size = 5;
+}
+
+message DeleteResult {
+  string id = 1;
+}
+
+service StudentService {
+  rpc CreateStudent(CreateStudentRequest) returns (Student);
+  rpc GetStudent(GetStudentRequest) returns (Student);
+  rpc UpdateStudent(UpdateStudentRequest) returns (Student);
+  rpc DeleteStudent(DeleteStudentRequest) returns (DeleteResult);
+  rpc SearchStudents(SearchStudentsRequest) returns (SearchStudentsResponse);
+}
+
+service ProfessorService {
+  rpc CreateProfessor(CreateProfessorRequest) returns (Professor);
+  rpc GetProfessor(GetProfessorRequest) returns (Professor);
+  rpc UpdateProfessor(UpdateProfessorRequest) returns (Professor);
+  rpc DeleteProfessor(DeleteProfessorRequest) returns (DeleteResult);
+  rpc SearchProfessors(SearchProfessorsRequest) returns (SearchProfessorsResponse);
+}
+
+service CourseService {
+  rpc CreateCourse(CreateCourseRequest) returns (Course);
+  rpc GetCourse(GetCourseRequest) returns (Course);
+  rpc UpdateCourse(UpdateCourseRequest) returns (Course);
+  rpc DeleteCourse(DeleteCourseRequest) returns (DeleteResult);
+  rpc SearchCourses(SearchCoursesRequest) returns (SearchCoursesResponse);
+}

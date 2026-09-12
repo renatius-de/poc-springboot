@@ -23,6 +23,7 @@
         <maven.compiler.release>25</maven.compiler.release>
         <spring-boot.version>4.1.1</spring-boot.version>
         <spring-cloud.version>2025.1.3</spring-cloud.version>
+        <spring-grpc.version>1.0.3</spring-grpc.version>
         <testcontainers.version>2.0.5</testcontainers.version>
         <archunit.version>1.5.0</archunit.version>
         <mapstruct.version>1.6.3</mapstruct.version>
@@ -33,6 +34,7 @@
         <module>restclient</module>
         <module>data</module>
         <module>rest</module>
+        <module>grpc</module>
     </modules>
 
     <dependencyManagement>
@@ -50,6 +52,11 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.grpc</groupId>
+                <artifactId>spring-grpc-spring-boot-starter</artifactId>
+                <version>${spring-grpc.version}</version>
             </dependency>
 
             <dependency>
