@@ -78,6 +78,23 @@ class ProfessorControllerIntegrationTest extends AbstractTestcontainersTest {
   }
 
   @Test
+  void shouldReturnBadRequestWhenUpdateBodyIdMismatchesPathId() throws Exception {
+    Professor existing =
+        professorRepository.save(
+            Professor.builder().title("Dr.").firstName("Alan").lastName("Turing").build());
+    ProfessorDto update = new ProfessorDto(UUID.randomUUID(), "Dr.", "Alan", "Turing");
+
+    mockMvc
+        .perform(
+            put("/api/professors/{id}", existing.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(update)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").exists());
+  }
+
+  @Test
   void shouldDeleteProfessor() throws Exception {
     Professor existing =
         professorRepository.save(

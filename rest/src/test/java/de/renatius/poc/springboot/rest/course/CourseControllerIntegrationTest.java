@@ -87,6 +87,24 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
   }
 
   @Test
+  void shouldReturnBadRequestWhenUpdateBodyIdMismatchesPathId() throws Exception {
+    Professor professor =
+        professorRepository.save(
+            Professor.builder().title("Dr.").firstName("Alan").lastName("Turing").build());
+    Course existing = courseRepository.save(Course.builder().name("Algorithms").room("B-202").build());
+    CourseDto update = new CourseDto(UUID.randomUUID(), "Algorithms", "B-202", professor.getId());
+
+    mockMvc
+        .perform(
+            put("/api/courses/{id}", existing.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(update)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").exists());
+  }
+
+  @Test
   void shouldDeleteCourse() throws Exception {
     Course existing = courseRepository.save(Course.builder().name("Compilers").room("D-404").build());
 
