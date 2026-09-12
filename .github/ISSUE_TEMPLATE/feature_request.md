@@ -1,20 +1,29 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+about: Suggest a backend, API, build, or repository improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees: []
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Problem statement**
+Describe the problem or use case behind the request.
 
-**Describe the solution you'd like**
+**Proposed solution**
 A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
+**Affected area**
+- Module:
+- API / workflow / documentation / build:
+
+**Alternatives considered**
 A clear and concise description of any alternative solutions or features you've considered.
+
+**Implementation notes**
+- Configuration changes needed:
+- Dependency changes needed:
+- Observability or metrics impact:
 
 **Additional context**
 Add any other context or screenshots about the feature request here.

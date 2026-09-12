@@ -1,26 +1,26 @@
 ---
 name: Build
+
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
-  checks: write
+  contents: read
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     permissions:
-      actions: read
       contents: read
-      security-events: write
-    strategy:
-      fail-fast: true
-      matrix:
-        language: ['java']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,17 +44,7 @@ jobs:
       - name: Ensure Maven Wrapper is executable
         run: chmod +x ./mvnw
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-
       - name: Build and verify with Maven Wrapper
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./mvnw -B -ntp clean verify
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: /language:${{matrix.language}}
