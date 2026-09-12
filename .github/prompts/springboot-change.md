@@ -4,7 +4,7 @@ Implement a change in this repository using the existing project conventions.
 
 ## Repository constraints
 
-- Use Java 25 and Spring Boot 4 compatible code
+- Use Java 25 and code compatible with the Spring Boot version declared in the parent POM
 - Use the Maven Wrapper for commands
 - Respect parent POM dependency management and BOM imports
 - Make the smallest change that fully solves the task
