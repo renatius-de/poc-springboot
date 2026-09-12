@@ -1,4 +1,4 @@
-package com.example.data.dto;
+package de.renatius.poc.springboot.data.dto;
 
 import java.util.UUID;
 

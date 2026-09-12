@@ -1,8 +1,8 @@
-package com.example.data.mapper;
+package de.renatius.poc.springboot.data.mapper;
 
-import com.example.data.dto.CourseDto;
-import com.example.data.entity.Course;
-import com.example.data.entity.Professor;
+import de.renatius.poc.springboot.data.dto.CourseDto;
+import de.renatius.poc.springboot.data.entity.Course;
+import de.renatius.poc.springboot.data.entity.Professor;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

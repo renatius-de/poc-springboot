@@ -1,4 +1,4 @@
-package com.example.data.entity;
+package de.renatius.poc.springboot.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,24 @@ public class Professor {
 
   @Builder.Default
   @OneToMany(mappedBy = "professor")
+  @Setter(AccessLevel.NONE)
   @ToString.Exclude
   private List<Course> courses = new ArrayList<>();
+
+  public void addCourse(Course course) {
+    if (course == null) {
+      return;
+    }
+    course.setProfessor(this);
+  }
+
+  public void removeCourse(Course course) {
+    if (course == null) {
+      return;
+    }
+    courses.remove(course);
+    if (course.getProfessor() == this) {
+      course.setProfessor(null);
+    }
+  }
 }

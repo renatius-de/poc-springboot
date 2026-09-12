@@ -1,4 +1,4 @@
-package com.example.data.entity;
+package de.renatius.poc.springboot.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -51,6 +52,21 @@ public class Student {
       name = "student_course",
       joinColumns = @JoinColumn(name = "student_id"),
       inverseJoinColumns = @JoinColumn(name = "course_id"))
+  @Setter(AccessLevel.NONE)
   @ToString.Exclude
   private Set<Course> courses = new HashSet<>();
+
+  public void addCourse(Course course) {
+    if (course == null || !courses.add(course)) {
+      return;
+    }
+    course.getStudents().add(this);
+  }
+
+  public void removeCourse(Course course) {
+    if (course == null || !courses.remove(course)) {
+      return;
+    }
+    course.getStudents().remove(this);
+  }
 }
