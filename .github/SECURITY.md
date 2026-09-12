@@ -2,13 +2,30 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This repository is maintained on the default branch and through current pull requests.
+
+| Version / branch | Supported |
+| --- | --- |
+| `main` | :white_check_mark: |
+| older branches and snapshots | :x: |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+- Do not open public issues for suspected vulnerabilities.
+- Prefer GitHub's private vulnerability reporting for this repository when it is available.
+- If private reporting is not available, contact the maintainer through GitHub and share only the minimum details needed to reproduce the issue.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+## What to include
+
+Please include:
+
+- affected branch, module, or workflow
+- reproduction steps
+- expected impact
+- suggested mitigations, if known
+
+## Response expectations
+
+- An initial triage response is targeted within 5 business days.
+- Confirmed issues will be handled privately until a fix or mitigation is ready.
+- When appropriate, remediation details will be documented in the related pull request or release notes.

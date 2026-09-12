@@ -1,9 +1,9 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+about: Report a backend, build, or workflow problem
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
 
 ---
 
@@ -13,29 +13,25 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Steps to reproduce the behavior:
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1. Trigger the affected endpoint, workflow, or build step
+2. Provide the request, command, or action that reproduces the issue
+3. Include the observed failure
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Affected area**
+- Module:
+- Package / class / workflow:
+- Environment:
 
-**Desktop (please complete the following information):**
+**Logs or stack trace**
+Paste relevant logs, stack traces, or workflow output.
 
-- OS: [e.g. iOS]
-- Browser [e.g. chrome, safari]
-- Version [e.g. 22]
-
-**Mobile phone (please complete the following information):**
-
-- Device: [e.g. iPhone6]
-- OS: [e.g. iOS8.1]
-- Browser [e.g. stock browser, safari]
-- Version [e.g. 22]
+**Configuration details**
+- Java version:
+- Maven command used:
+- Branch or commit:
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context, links, or screenshots here.
