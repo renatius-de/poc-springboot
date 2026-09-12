@@ -1,7 +1,7 @@
-package com.example.data.mapper;
+package de.renatius.poc.springboot.data.mapper;
 
-import com.example.data.dto.StudentDto;
-import com.example.data.entity.Student;
+import de.renatius.poc.springboot.data.dto.StudentDto;
+import de.renatius.poc.springboot.data.entity.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

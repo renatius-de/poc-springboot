@@ -38,3 +38,6 @@ CREATE TABLE student_course
         FOREIGN KEY (course_id)
             REFERENCES course (id)
 );
+
+CREATE INDEX idx_course_professor_id ON course (professor_id);
+CREATE INDEX idx_student_course_course_id ON student_course (course_id);

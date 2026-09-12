@@ -1,4 +1,4 @@
-package com.example.data;
+package de.renatius.poc.springboot.data;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

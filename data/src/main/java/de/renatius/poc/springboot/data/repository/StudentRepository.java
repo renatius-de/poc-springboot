@@ -1,6 +1,6 @@
-package com.example.data.repository;
+package de.renatius.poc.springboot.data.repository;
 
-import com.example.data.entity.Student;
+import de.renatius.poc.springboot.data.entity.Student;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
