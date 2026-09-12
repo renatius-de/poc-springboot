@@ -53,7 +53,7 @@ jobs:
       - name: Build with Maven Wrapper
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./mvnw -B -ntp clean test-compile
+        run: ./mvnw -B -ntp clean compile test-compile
 
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v3
