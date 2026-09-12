@@ -4,6 +4,8 @@ name: Super-Linter
 on:
   pull_request:
     branches: [main, master]
+    paths:
+      - ".github/**"
   workflow_dispatch:
 
 concurrency:
