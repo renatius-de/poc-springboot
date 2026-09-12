@@ -97,7 +97,10 @@ public class CourseController {
     if (request.name() == null || request.name().isBlank()) {
       throw new IllegalArgumentException("name must not be blank");
     }
-    if (request.professorId() != null && !professorRepository.existsById(request.professorId())) {
+    if (request.professorId() == null) {
+      throw new IllegalArgumentException("professorId must not be null");
+    }
+    if (!professorRepository.existsById(request.professorId())) {
       throw new IllegalArgumentException("professorId '%s' does not exist".formatted(request.professorId()));
     }
   }
