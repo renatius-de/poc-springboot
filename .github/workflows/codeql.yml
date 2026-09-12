@@ -32,7 +32,7 @@ jobs:
         language: [java]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up JDK
         uses: actions/setup-java@v6
@@ -45,7 +45,7 @@ jobs:
         run: chmod +x ./mvnw
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           build-mode: manual
@@ -56,6 +56,6 @@ jobs:
         run: ./mvnw -B -ntp clean verify
 
       - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: /language:${{ matrix.language }}
