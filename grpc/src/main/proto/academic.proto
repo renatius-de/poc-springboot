@@ -36,8 +36,8 @@ message GetStudentRequest {
 
 message UpdateStudentRequest {
   string id = 1;
-  string first_name = 2;
-  string last_name = 3;
+  optional string first_name = 2;
+  optional string last_name = 3;
 }
 
 message DeleteStudentRequest {
@@ -77,9 +77,9 @@ message GetProfessorRequest {
 
 message UpdateProfessorRequest {
   string id = 1;
-  string title = 2;
-  string first_name = 3;
-  string last_name = 4;
+  optional string title = 2;
+  optional string first_name = 3;
+  optional string last_name = 4;
 }
 
 message DeleteProfessorRequest {
@@ -119,9 +119,9 @@ message GetCourseRequest {
 
 message UpdateCourseRequest {
   string id = 1;
-  string name = 2;
-  string room = 3;
-  string professor_id = 4;
+  optional string name = 2;
+  optional string room = 3;
+  optional string professor_id = 4;
 }
 
 message DeleteCourseRequest {
