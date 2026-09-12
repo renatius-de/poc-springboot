@@ -32,6 +32,7 @@
     <modules>
         <module>restclient</module>
         <module>data</module>
+        <module>rest</module>
     </modules>
 
     <dependencyManagement>
