@@ -50,7 +50,6 @@ public class Professor {
   @Builder.Default
   @OneToMany(mappedBy = "professor")
   @Setter(AccessLevel.NONE)
-  @ToString.Exclude
   private List<Course> courses = new ArrayList<>();
 
   public void addCourse(Course course) {
