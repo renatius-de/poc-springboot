@@ -54,10 +54,12 @@ public class ProfessorController {
     if (request.id() != null && !request.id().equals(id)) {
       throw new IllegalArgumentException("Body id must match path id");
     }
-    if (!repository.existsById(id)) {
-      throw new ResourceNotFoundException("Professor", id);
-    }
-    Professor updated = repository.save(mapper.toEntityForUpdate(id, request));
+    Professor existing =
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id));
+    existing.setTitle(request.title());
+    existing.setFirstName(request.firstName());
+    existing.setLastName(request.lastName());
+    Professor updated = repository.save(existing);
     return mapper.toDto(updated);
   }
 

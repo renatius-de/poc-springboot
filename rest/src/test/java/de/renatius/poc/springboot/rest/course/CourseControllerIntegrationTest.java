@@ -159,4 +159,25 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
         .andExpect(jsonPath("$.status").value(400))
         .andExpect(jsonPath("$.detail").exists());
   }
+
+  @Test
+  void shouldReturnBadRequestForUnknownProfessorIdOnUpdate() throws Exception {
+    Professor professor =
+        professorRepository.save(
+            Professor.builder().title("Dr.").firstName("Ada").lastName("Lovelace").build());
+    Course existing = courseRepository.save(Course.builder().name("Databases").room("R-202").build());
+    existing.setProfessor(professor);
+    existing = courseRepository.save(existing);
+
+    CourseDto update = new CourseDto(existing.getId(), "Databases", "R-202", UUID.randomUUID());
+
+    mockMvc
+        .perform(
+            put("/api/courses/{id}", existing.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(update)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").exists());
+  }
 }

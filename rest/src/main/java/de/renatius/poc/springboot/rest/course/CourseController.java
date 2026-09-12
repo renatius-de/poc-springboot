@@ -60,10 +60,12 @@ public class CourseController {
     if (request.id() != null && !request.id().equals(id)) {
       throw new IllegalArgumentException("Body id must match path id");
     }
-    if (!courseRepository.existsById(id)) {
-      throw new ResourceNotFoundException("Course", id);
-    }
-    Course updated = courseRepository.save(mapper.toEntityForUpdate(id, request));
+    Course existing =
+        courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
+    existing.setName(request.name());
+    existing.setRoom(request.room());
+    existing.setProfessor(professorRepository.getReferenceById(request.professorId()));
+    Course updated = courseRepository.save(existing);
     return mapper.toDto(updated);
   }
 

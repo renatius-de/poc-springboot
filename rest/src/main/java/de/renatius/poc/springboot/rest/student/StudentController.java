@@ -54,10 +54,11 @@ public class StudentController {
     if (request.id() != null && !request.id().equals(id)) {
       throw new IllegalArgumentException("Body id must match path id");
     }
-    if (!repository.existsById(id)) {
-      throw new ResourceNotFoundException("Student", id);
-    }
-    Student updated = repository.save(mapper.toEntityForUpdate(id, request));
+    Student existing =
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", id));
+    existing.setFirstName(request.firstName());
+    existing.setLastName(request.lastName());
+    Student updated = repository.save(existing);
     return mapper.toDto(updated);
   }
 

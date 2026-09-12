@@ -21,7 +21,6 @@
         <dependency>
             <groupId>de.renatius.poc.springboot</groupId>
             <artifactId>data</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
