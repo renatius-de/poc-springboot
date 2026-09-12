@@ -42,7 +42,7 @@ public class StudentController {
         .body(mapper.toDto(saved));
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public StudentDto getById(@PathVariable UUID id) {
     return mapper.toDto(
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", id)));
