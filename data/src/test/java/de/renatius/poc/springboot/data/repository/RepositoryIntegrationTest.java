@@ -12,23 +12,16 @@ import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.mapper.CourseMapper;
 import de.renatius.poc.springboot.data.mapper.ProfessorMapper;
 import de.renatius.poc.springboot.data.mapper.StudentMapper;
+import de.renatius.poc.springboot.data.testsupport.AbstractTestcontainersTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
 @SpringBootTest(classes = TestDataApplication.class)
 @Transactional
-class RepositoryIntegrationTest {
-
-  @Container @ServiceConnection
-  static PostgreSQLContainer<?> postgresql = new PostgreSQLContainer<>("postgres:17-alpine");
+class RepositoryIntegrationTest extends AbstractTestcontainersTest {
 
   @Autowired private ProfessorRepository professorRepository;
   @Autowired private CourseRepository courseRepository;
