@@ -28,8 +28,14 @@ public class ApplicationClassAssert extends AbstractAssert<ApplicationClassAsser
     isNotNull();
     try {
       var mainMethod = actual.getDeclaredMethod("main", String[].class);
-      if (!Modifier.isStatic(mainMethod.getModifiers())) {
-        failWithMessage("Expected class <%s> to define a static main(String[]) method", actual.getName());
+      var modifiers = mainMethod.getModifiers();
+      if (!Modifier.isStatic(modifiers) || !Modifier.isPublic(modifiers)) {
+        failWithMessage(
+            "Expected class <%s> to define a public static main(String[]) method",
+            actual.getName());
+      }
+      if (!Void.TYPE.equals(mainMethod.getReturnType())) {
+        failWithMessage("Expected class <%s> main(String[]) to return void", actual.getName());
       }
     } catch (NoSuchMethodException e) {
       failWithMessage("Expected class <%s> to define a main(String[]) method", actual.getName());
