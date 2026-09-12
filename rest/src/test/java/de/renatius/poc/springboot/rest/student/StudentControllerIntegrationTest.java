@@ -72,6 +72,21 @@ class StudentControllerIntegrationTest extends AbstractTestcontainersTest {
   }
 
   @Test
+  void shouldReturnBadRequestWhenUpdateBodyIdMismatchesPathId() throws Exception {
+    Student existing = studentRepository.save(Student.builder().firstName("Alan").lastName("Turing").build());
+    StudentDto update = new StudentDto(UUID.randomUUID(), "Alan", "Turing");
+
+    mockMvc
+        .perform(
+            put("/api/students/{id}", existing.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(update)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").exists());
+  }
+
+  @Test
   void shouldDeleteStudent() throws Exception {
     Student existing = studentRepository.save(Student.builder().firstName("Grace").lastName("Hopper").build());
 

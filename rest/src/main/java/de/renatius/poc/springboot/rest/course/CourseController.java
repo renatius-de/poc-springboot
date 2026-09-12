@@ -57,6 +57,9 @@ public class CourseController {
   @PutMapping("/{id}")
   public CourseDto update(@PathVariable UUID id, @RequestBody CourseDto request) {
     validate(request);
+    if (request.id() != null && !request.id().equals(id)) {
+      throw new IllegalArgumentException("Body id must match path id");
+    }
     if (!courseRepository.existsById(id)) {
       throw new ResourceNotFoundException("Course", id);
     }

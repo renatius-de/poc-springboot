@@ -51,6 +51,9 @@ public class ProfessorController {
   @PutMapping("/{id}")
   public ProfessorDto update(@PathVariable UUID id, @RequestBody ProfessorDto request) {
     validate(request);
+    if (request.id() != null && !request.id().equals(id)) {
+      throw new IllegalArgumentException("Body id must match path id");
+    }
     if (!repository.existsById(id)) {
       throw new ResourceNotFoundException("Professor", id);
     }
