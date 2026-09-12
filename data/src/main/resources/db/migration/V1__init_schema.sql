@@ -28,9 +28,11 @@ CREATE TABLE student
 
 CREATE TABLE student_course
 (
+    id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID NOT NULL,
     course_id  UUID NOT NULL,
-    PRIMARY KEY (student_id, course_id),
+    CONSTRAINT uq_student_course_student_id_course_id
+        UNIQUE (student_id, course_id),
     CONSTRAINT fk_student_course_student
         FOREIGN KEY (student_id)
             REFERENCES student (id),
