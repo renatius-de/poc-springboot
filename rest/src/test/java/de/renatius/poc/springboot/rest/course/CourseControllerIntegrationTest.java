@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
 
-  @Autowired private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   @Autowired private CourseRepository courseRepository;
   @Autowired private ProfessorRepository professorRepository;
 
