@@ -30,8 +30,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: 25
           distribution: corretto
+          cache: maven
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
@@ -40,23 +41,18 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+      - name: Ensure Maven Wrapper is executable
+        run: chmod +x ./mvnw
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
-      - name: Build and analyze code with Gradle
+      - name: Build and verify with Maven Wrapper
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew --info clean build sonar pitest
+        run: ./mvnw -B -ntp clean verify
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
