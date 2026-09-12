@@ -4,7 +4,7 @@
 
 - This repository is a Maven multi-module project with the parent build in `pom.xml`.
 - The currently active application module is `restclient`.
-- The codebase targets Java 25 and Spring Boot 4.
+- The codebase targets Java 25 and the Spring Boot line declared in the parent POM.
 - Spring dependency versions are managed centrally through the parent POM and imported BOMs.
 
 ## Change rules
