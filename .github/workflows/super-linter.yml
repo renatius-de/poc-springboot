@@ -26,7 +26,13 @@ jobs:
       - name: Load Super-Linter environment
         run: |
           if [ -f .github/super-linter.env ]; then
-            cat .github/super-linter.env >> "$GITHUB_ENV"
+            while IFS='=' read -r key value; do
+              case "$key" in
+                DEFAULT_BRANCH|IGNORE_GENERATED_FILES|IGNORE_GITIGNORED_FILES|VALIDATE_JSCPD|VALIDATE_KOTLIN_ANDROID|VALIDATE_SHELL_SHFMT|VALIDATE_SQLFLUFF)
+                  printf '%s=%s\n' "$key" "$value" >> "$GITHUB_ENV"
+                  ;;
+              esac
+            done < .github/super-linter.env
           fi
 
       - name: Run Super-Linter
