@@ -101,9 +101,13 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
         () -> {
           String firstName = request.hasFirstName() ? request.getFirstName() : null;
           String lastName = request.hasLastName() ? request.getLastName() : null;
-          Specification<Student> specification =
-              Specification.<Student>where(likeIgnoreCase("firstName", firstName))
-                  .and(likeIgnoreCase("lastName", lastName));
+          Specification<Student> specification = (root, query, cb) -> cb.conjunction();
+          if (firstName != null && !firstName.isBlank()) {
+            specification = specification.and(likeIgnoreCase("firstName", firstName));
+          }
+          if (lastName != null && !lastName.isBlank()) {
+            specification = specification.and(likeIgnoreCase("lastName", lastName));
+          }
           var pageable = toPageable(request.hasPage() ? request.getPage() : null, "lastName", "firstName");
           var page = studentRepository.findAll(specification, pageable).map(studentMapper::toDto);
           return grpcMapper.toStudentSearchResponse(page);
