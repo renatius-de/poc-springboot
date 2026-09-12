@@ -74,7 +74,6 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>${protobuf.maven.plugin.version}</version>
                 <configuration>
-                    <includeStdTypes>true</includeStdTypes>
                     <protocArtifact>com.google.protobuf:protoc:${grpc.protoc.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.java.version}:exe:${os.detected.classifier}</pluginArtifact>
