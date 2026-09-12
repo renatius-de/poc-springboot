@@ -48,13 +48,11 @@ public class Course {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "professor_id")
-  @ToString.Exclude
   private Professor professor;
 
   @Builder.Default
   @ManyToMany(mappedBy = "courses")
   @Setter(AccessLevel.NONE)
-  @ToString.Exclude
   private Set<Student> students = new HashSet<>();
 
   public void setProfessor(Professor professor) {

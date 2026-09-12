@@ -53,7 +53,6 @@ public class Student {
       joinColumns = @JoinColumn(name = "student_id"),
       inverseJoinColumns = @JoinColumn(name = "course_id"))
   @Setter(AccessLevel.NONE)
-  @ToString.Exclude
   private Set<Course> courses = new HashSet<>();
 
   public void addCourse(Course course) {
