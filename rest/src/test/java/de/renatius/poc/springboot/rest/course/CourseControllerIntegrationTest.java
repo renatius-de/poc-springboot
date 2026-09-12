@@ -145,4 +145,18 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
         .andExpect(jsonPath("$.status").value(404))
         .andExpect(jsonPath("$.detail").exists());
   }
+
+  @Test
+  void shouldReturnBadRequestForUnknownProfessorId() throws Exception {
+    CourseDto request = new CourseDto(null, "Networks", "N-101", UUID.randomUUID());
+
+    mockMvc
+        .perform(
+            post("/api/courses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").exists());
+  }
 }
