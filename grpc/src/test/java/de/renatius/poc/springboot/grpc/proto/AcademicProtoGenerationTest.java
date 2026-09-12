@@ -3,6 +3,7 @@ package de.renatius.poc.springboot.grpc.proto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.renatius.poc.springboot.grpc.v1.Student;
+import de.renatius.poc.springboot.grpc.v1.StudentServiceGrpc;
 import org.junit.jupiter.api.Test;
 
 class AcademicProtoGenerationTest {
@@ -18,5 +19,7 @@ class AcademicProtoGenerationTest {
 
     assertThat(student.getFirstName()).isEqualTo("Ada");
     assertThat(student.getLastName()).isEqualTo("Lovelace");
+    assertThat(StudentServiceGrpc.getServiceDescriptor().getName())
+        .isEqualTo("de.renatius.poc.springboot.grpc.v1.StudentService");
   }
 }
