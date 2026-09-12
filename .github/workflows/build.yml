@@ -12,6 +12,9 @@ concurrency:
   group: build-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  JAVA_VERSION: "25"
+
 permissions:
   contents: read
 
@@ -30,7 +33,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 25
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: corretto
           cache: maven
 
