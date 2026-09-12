@@ -47,6 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
+          DEFAULT_WORKSPACE: ${{ github.workspace }}/.github
           FILTER_REGEX_INCLUDE: ^\.github/
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_GITHUB_ACTIONS: true
