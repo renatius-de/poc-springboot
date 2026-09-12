@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.repository.StudentRepository;
@@ -21,7 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 class StudentControllerIntegrationTest extends AbstractTestcontainersTest {
 
-  @Autowired private com.fasterxml.jackson.databind.ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   @Autowired private StudentRepository studentRepository;
 
   @Test
