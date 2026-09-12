@@ -20,12 +20,10 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
 
-  @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
   @Autowired private CourseRepository courseRepository;
   @Autowired private ProfessorRepository professorRepository;
