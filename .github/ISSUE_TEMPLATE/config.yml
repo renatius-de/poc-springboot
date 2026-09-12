@@ -2,8 +2,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability reporting
-    url: https://docs.github.com/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/about-coordinated-disclosure-of-security-vulnerabilities
+    url: https://github.com/renatius-de/poc-springboot/security/policy
     about: Review the repository security policy and use private reporting whenever possible.
   - name: Contribution guide
-    url: https://docs.github.com/communities/setting-up-your-project-for-healthy-contributions/setting-guidelines-for-repository-contributors
+    url: https://github.com/renatius-de/poc-springboot/blob/HEAD/.github/CONTRIBUTING.md
     about: Review the repository contribution guide for local setup, validation, and pull request expectations.
