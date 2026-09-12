@@ -26,30 +26,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Load Super-Linter environment
-        run: |
-          if [ -f .github/super-linter.env ]; then
-            while IFS='=' read -r key value; do
-              [ -z "$key" ] && continue
-              case "$key" in
-                \#*)
-                  continue
-                  ;;
-                DEFAULT_BRANCH|IGNORE_GENERATED_FILES|IGNORE_GITIGNORED_FILES|VALIDATE_GITHUB_ACTIONS|VALIDATE_GITHUB_ACTIONS_ZIZMOR|VALIDATE_JSCPD|VALIDATE_KOTLIN_ANDROID|VALIDATE_MARKDOWN|VALIDATE_SHELL_SHFMT|VALIDATE_SQLFLUFF|VALIDATE_YAML)
-                  printf '%s=%s\n' "$key" "$value" >> "$GITHUB_ENV"
-                  ;;
-              esac
-            done < .github/super-linter.env
-          fi
-
       - name: Run Super-Linter
         uses: super-linter/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
           FILTER_REGEX_INCLUDE: ^\.github/
+          IGNORE_GENERATED_FILES: true
+          IGNORE_GITIGNORED_FILES: true
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
+          VALIDATE_JSCPD: false
+          VALIDATE_KOTLIN_ANDROID: false
           VALIDATE_MARKDOWN: true
+          VALIDATE_SHELL_SHFMT: false
+          VALIDATE_SQLFLUFF: false
           VALIDATE_YAML: true
