@@ -144,15 +144,13 @@ message SearchCoursesResponse {
   int32 size = 5;
 }
 
-message DeleteResult {
-  string id = 1;
-}
+message Empty {}
 
 service StudentService {
   rpc CreateStudent(CreateStudentRequest) returns (Student);
   rpc GetStudent(GetStudentRequest) returns (Student);
   rpc UpdateStudent(UpdateStudentRequest) returns (Student);
-  rpc DeleteStudent(DeleteStudentRequest) returns (DeleteResult);
+  rpc DeleteStudent(DeleteStudentRequest) returns (Empty);
   rpc SearchStudents(SearchStudentsRequest) returns (SearchStudentsResponse);
 }
 
@@ -160,7 +158,7 @@ service ProfessorService {
   rpc CreateProfessor(CreateProfessorRequest) returns (Professor);
   rpc GetProfessor(GetProfessorRequest) returns (Professor);
   rpc UpdateProfessor(UpdateProfessorRequest) returns (Professor);
-  rpc DeleteProfessor(DeleteProfessorRequest) returns (DeleteResult);
+  rpc DeleteProfessor(DeleteProfessorRequest) returns (Empty);
   rpc SearchProfessors(SearchProfessorsRequest) returns (SearchProfessorsResponse);
 }
 
@@ -168,6 +166,6 @@ service CourseService {
   rpc CreateCourse(CreateCourseRequest) returns (Course);
   rpc GetCourse(GetCourseRequest) returns (Course);
   rpc UpdateCourse(UpdateCourseRequest) returns (Course);
-  rpc DeleteCourse(DeleteCourseRequest) returns (DeleteResult);
+  rpc DeleteCourse(DeleteCourseRequest) returns (Empty);
   rpc SearchCourses(SearchCoursesRequest) returns (SearchCoursesResponse);
 }
