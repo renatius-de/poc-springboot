@@ -1,0 +1,23 @@
+FROM amazoncorretto:25-alpine AS build
+WORKDIR /workspace
+
+COPY . .
+
+RUN ./mvnw -B -ntp -pl rest -am package -DskipTests
+RUN APP_JAR="$(find rest/target -maxdepth 1 -type f -name '*.jar' ! -name '*.original' | head -n 1)" \
+    && test -n "$APP_JAR" \
+    && cp "$APP_JAR" app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
+
+FROM amazoncorretto:25-alpine AS runtime
+RUN addgroup -S spring && adduser -S spring -G spring
+WORKDIR /app
+
+COPY --from=build /workspace/dependencies/ ./
+COPY --from=build /workspace/spring-boot-loader/ ./
+COPY --from=build /workspace/snapshot-dependencies/ ./
+COPY --from=build /workspace/application/ ./
+
+USER spring:spring
+EXPOSE 8080
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
