@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: pocspringboot
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  rest:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.rest
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pocspringboot
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  grpc:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.grpc
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pocspringboot
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: app
+      GRPC_SERVER_PORT: 9090
+      SERVER_PORT: 8081
+      MANAGEMENT_SERVER_PORT: 8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "9090:9090"
+      - "8081:8081"
