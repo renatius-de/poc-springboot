@@ -34,3 +34,10 @@
 - Summarize what changed and why.
 - Mention any workflow, dependency, or contributor-experience impact.
 - Call out follow-up work separately instead of mixing it into the same change.
+
+## CI/CD rules (mandatory)
+
+- Java applications must never be built twice in GitHub Actions, nor rebuilt in separate workflows.
+- Use the central `build` job in `.github/workflows/build.yml`, which runs the Maven build once and publishes the `maven-target` artifact via `actions/upload-artifact`.
+- Test, lint, and deploy jobs or workflows must consume that artifact via `actions/download-artifact` instead of running their own `./mvnw clean ...`.
+- Prefer build-free analysis modes (for example CodeQL `build-mode: none`) over additional Maven builds.
