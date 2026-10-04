@@ -5,10 +5,37 @@ set -euo pipefail
 MODE="${1:-k6}"
 NS="load-testing"
 DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$DIR/.." && pwd)"
+
+REST_DOCKERFILE="docker/Dockerfile.rest"
+GRPC_DOCKERFILE="docker/Dockerfile.grpc"
+REST_IMAGE="poc-springboot-rest:local"
+GRPC_IMAGE="poc-springboot-grpc:local"
+POSTGRES_DEPLOYMENT="postgres"
+REST_DEPLOYMENT="rest"
+GRPC_DEPLOYMENT="grpc"
+
+case "$MODE" in
+  k6|testkube) ;;
+  *)
+    echo "Usage: $0 [k6|testkube]" >&2
+    exit 1
+    ;;
+esac
+
+docker build --file "$ROOT_DIR/$REST_DOCKERFILE" --tag "$REST_IMAGE" "$ROOT_DIR"
+docker build --file "$ROOT_DIR/$GRPC_DOCKERFILE" --tag "$GRPC_IMAGE" "$ROOT_DIR"
+
+kubectl apply -f "$DIR/manifests/namespace"
+kubectl apply -f "$DIR/manifests/apps/postgres.yaml"
+kubectl -n "$NS" rollout status "deployment/$POSTGRES_DEPLOYMENT" --timeout=180s
+kubectl apply -f "$DIR/manifests/apps/rest.yaml"
+kubectl apply -f "$DIR/manifests/apps/grpc.yaml"
+kubectl -n "$NS" rollout status "deployment/$REST_DEPLOYMENT" --timeout=180s
+kubectl -n "$NS" rollout status "deployment/$GRPC_DEPLOYMENT" --timeout=180s
 
 case "$MODE" in
   k6)
-    kubectl apply -f "$DIR/manifests/namespace"
     kubectl apply -f "$DIR/manifests/configmaps"
     kubectl -n "$NS" delete job k6-load-test --ignore-not-found
     kubectl apply -f "$DIR/manifests/jobs"
@@ -17,13 +44,8 @@ case "$MODE" in
     kubectl -n "$NS" logs job/k6-load-test
     ;;
   testkube)
-    kubectl apply -f "$DIR/manifests/namespace"
     kubectl apply -f "$DIR/manifests/configmaps"
     kubectl apply -f "$DIR/manifests/testkube"
     kubectl testkube run testworkflow k6-load-test -n "$NS" --watch
-    ;;
-  *)
-    echo "Usage: $0 [k6|testkube]" >&2
-    exit 1
     ;;
 esac

@@ -18,9 +18,6 @@ spec:
         - name: k6
           image: grafana/k6:0.54.0
           args: ["run", "/scripts/test.js"]
-          env:
-            - name: TARGET_URL
-              value: "https://test.k6.io"
           resources:
             requests:
               cpu: 100m
