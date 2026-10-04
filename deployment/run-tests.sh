@@ -28,6 +28,7 @@ docker build --file "$ROOT_DIR/$REST_DOCKERFILE" --tag "$REST_IMAGE" "$ROOT_DIR"
 docker build --file "$ROOT_DIR/$GRPC_DOCKERFILE" --tag "$GRPC_IMAGE" "$ROOT_DIR"
 
 kubectl apply -f "$DIR/manifests/namespace"
+kubectl -n "$NS" delete deployment/postgres service/postgres --ignore-not-found
 kubectl apply -f "$DIR/manifests/apps/rest-postgres.yaml"
 kubectl apply -f "$DIR/manifests/apps/grpc-postgres.yaml"
 kubectl -n "$NS" rollout status "deployment/$REST_POSTGRES_DEPLOYMENT" --timeout=180s
