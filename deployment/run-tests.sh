@@ -11,7 +11,8 @@ REST_DOCKERFILE="docker/Dockerfile.rest"
 GRPC_DOCKERFILE="docker/Dockerfile.grpc"
 REST_IMAGE="poc-springboot-rest:local"
 GRPC_IMAGE="poc-springboot-grpc:local"
-POSTGRES_DEPLOYMENT="postgres"
+REST_POSTGRES_DEPLOYMENT="rest-postgres"
+GRPC_POSTGRES_DEPLOYMENT="grpc-postgres"
 REST_DEPLOYMENT="rest"
 GRPC_DEPLOYMENT="grpc"
 
@@ -27,12 +28,16 @@ docker build --file "$ROOT_DIR/$REST_DOCKERFILE" --tag "$REST_IMAGE" "$ROOT_DIR"
 docker build --file "$ROOT_DIR/$GRPC_DOCKERFILE" --tag "$GRPC_IMAGE" "$ROOT_DIR"
 
 kubectl apply -f "$DIR/manifests/namespace"
-kubectl apply -f "$DIR/manifests/apps/postgres.yaml"
-kubectl -n "$NS" rollout status "deployment/$POSTGRES_DEPLOYMENT" --timeout=180s
+kubectl apply -f "$DIR/manifests/apps/rest-postgres.yaml"
+kubectl apply -f "$DIR/manifests/apps/grpc-postgres.yaml"
+kubectl -n "$NS" rollout status "deployment/$REST_POSTGRES_DEPLOYMENT" --timeout=180s
+kubectl -n "$NS" rollout status "deployment/$GRPC_POSTGRES_DEPLOYMENT" --timeout=180s
 kubectl apply -f "$DIR/manifests/apps/rest.yaml"
 kubectl apply -f "$DIR/manifests/apps/grpc.yaml"
 kubectl -n "$NS" rollout status "deployment/$REST_DEPLOYMENT" --timeout=180s
 kubectl -n "$NS" rollout status "deployment/$GRPC_DEPLOYMENT" --timeout=180s
+kubectl -n "$NS" wait --for=condition=Ready pod --all \
+  -l app.kubernetes.io/part-of=poc-springboot --timeout=180s
 
 case "$MODE" in
   k6)

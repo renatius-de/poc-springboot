@@ -25,11 +25,17 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: local
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/pocspringboot
+              value: jdbc:postgresql://grpc-postgres-service:5432/grpcdb
             - name: SPRING_DATASOURCE_USERNAME
-              value: app
+              valueFrom:
+                secretKeyRef:
+                  name: grpc-postgres-credentials
+                  key: POSTGRES_USER
             - name: SPRING_DATASOURCE_PASSWORD
-              value: app
+              valueFrom:
+                secretKeyRef:
+                  name: grpc-postgres-credentials
+                  key: POSTGRES_PASSWORD
             - name: GRPC_SERVER_PORT
               value: "9090"
             - name: SERVER_PORT
