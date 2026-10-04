@@ -51,3 +51,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./mvnw -B -ntp clean verify
+
+      - name: Upload Maven build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-target
+          path: "**/target/"
+          if-no-files-found: error
+          retention-days: 7
