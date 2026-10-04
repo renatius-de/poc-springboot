@@ -6,6 +6,8 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  schedule:
+    - cron: '23 4 * * 1'
   workflow_dispatch:
 
 concurrency:
@@ -16,7 +18,9 @@ env:
   JAVA_VERSION: "25"
 
 permissions:
+  actions: read
   contents: read
+  security-events: write
 
 jobs:
   build:
@@ -47,7 +51,45 @@ jobs:
       - name: Ensure Maven Wrapper is executable
         run: chmod +x ./mvnw
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java
+          build-mode: manual
+
       - name: Build and verify with Maven Wrapper
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./mvnw -B -ntp clean verify
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:java
+
+      - name: Upload packaged JARs
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-package
+          path: |
+            **/target/*.jar
+            !**/target/*-original.jar
+          if-no-files-found: error
+          retention-days: 7
+
+  artifact-consumer:
+    name: Verify packaged artifact
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Download packaged JARs
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-package
+          path: app-artifact
+
+      - name: Confirm packaged JARs are available
+        run: test -n "$(find app-artifact -type f -name '*.jar' -print -quit)"
