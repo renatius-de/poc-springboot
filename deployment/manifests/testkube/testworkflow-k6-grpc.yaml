@@ -1,0 +1,37 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: k6-grpc-benchmark
+  namespace: load-testing
+  labels:
+    test-type: benchmark
+    protocol: grpc
+spec:
+  content:
+    files:
+      - path: /data/k6/common.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: common.js
+      - path: /data/k6/test-grpc.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: test-grpc.js
+      - path: /data/k6/proto/academic.proto
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: academic.proto
+  container:
+    image: grafana/k6:0.54.0
+    workingDir: /data/k6
+    env:
+      - name: GRPC_ADDR
+        value: grpc-service.load-testing.svc.cluster.local:9090
+      - name: PROTO_DIR
+        value: /data/k6/proto
+  steps:
+    - name: Run k6 gRPC benchmark
+      shell: k6 run /data/k6/test-grpc.js

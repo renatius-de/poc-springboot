@@ -1,0 +1,30 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: k6-rest-benchmark
+  namespace: load-testing
+  labels:
+    test-type: benchmark
+    protocol: rest
+spec:
+  content:
+    files:
+      - path: /data/k6/common.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: common.js
+      - path: /data/k6/test-rest.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: test-rest.js
+  container:
+    image: grafana/k6:0.54.0
+    workingDir: /data/k6
+    env:
+      - name: REST_URL
+        value: http://rest-service.load-testing.svc.cluster.local:8080
+  steps:
+    - name: Run k6 REST benchmark
+      shell: k6 run /data/k6/test-rest.js
