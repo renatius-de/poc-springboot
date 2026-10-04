@@ -15,9 +15,6 @@ spec:
             key: test.js
   container:
     image: grafana/k6:0.54.0
-    env:
-      - name: TARGET_URL
-        value: "https://test.k6.io"
   steps:
     - name: Run k6
       shell: k6 run /data/test.js
