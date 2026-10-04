@@ -17,7 +17,7 @@ spec:
     image: grafana/k6:0.54.0
     env:
       - name: TARGET_URL
-        value: "https://test.k6.io"
+        value: "http://rest-service:8080/api/students/search"
   steps:
     - name: Run k6
       shell: k6 run /data/test.js

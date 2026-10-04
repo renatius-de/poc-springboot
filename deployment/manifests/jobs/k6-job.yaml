@@ -20,7 +20,7 @@ spec:
           args: ["run", "/scripts/test.js"]
           env:
             - name: TARGET_URL
-              value: "https://test.k6.io"
+              value: "http://rest-service:8080/api/students/search"
           resources:
             requests:
               cpu: 100m
