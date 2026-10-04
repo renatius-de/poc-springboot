@@ -1,0 +1,12 @@
+# Minimal standalone Testkube for local Docker Desktop
+testkube-api:
+  cloud:
+    key: ""
+  minio:
+    enabled: true
+  multinamespace:
+    enabled: false
+mongodb:
+  enabled: true
+testkube-dashboard:
+  enabled: true
