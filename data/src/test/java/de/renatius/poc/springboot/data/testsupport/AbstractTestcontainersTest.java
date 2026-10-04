@@ -11,5 +11,5 @@ public abstract class AbstractTestcontainersTest {
   @Container
   @ServiceConnection
   protected static final PostgreSQLContainer<?> postgresql =
-      new PostgreSQLContainer<>("postgres:17-alpine");
+      new PostgreSQLContainer<>("postgres:18-alpine");
 }

@@ -21,7 +21,7 @@ public abstract class AbstractTestcontainersTest {
   @Autowired private WebApplicationContext webApplicationContext;
 
   protected static final PostgreSQLContainer<?> postgresql =
-      new PostgreSQLContainer<>("postgres:17-alpine");
+      new PostgreSQLContainer<>("postgres:18-alpine");
 
   static {
     postgresql.start();
