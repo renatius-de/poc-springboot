@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:17-alpine
+          image: postgres:18-alpine
           envFrom:
             - secretRef:
                 name: rest-postgres-credentials
@@ -48,7 +48,7 @@ spec:
             failureThreshold: 12
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
       volumes:
         - name: data
           emptyDir: {}
