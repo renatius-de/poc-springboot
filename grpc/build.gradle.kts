@@ -8,7 +8,7 @@ plugins {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-grpc-server")
     implementation(project(":data"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
