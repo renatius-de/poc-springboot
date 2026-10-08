@@ -41,6 +41,7 @@ subprojects {
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
             dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
             dependency("com.tngtech.archunit:archunit-junit5:1.5.1")
+            dependency("com.google.protobuf:protobuf-java:4.36.2")
         }
     }
 
