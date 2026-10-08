@@ -30,7 +30,7 @@ Paste relevant logs, stack traces, or workflow output.
 
 **Configuration details**
 - Java version:
-- Maven command used:
+- Gradle command used:
 - Branch or commit:
 
 **Additional context**

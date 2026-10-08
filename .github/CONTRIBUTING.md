@@ -4,16 +4,16 @@ Thanks for contributing to this repository.
 
 ## Project overview
 
-- Parent build: `pom.xml`
+- Root build: `build.gradle.kts`
 - Active module: `restclient`
 - Runtime and build baseline: Java 25
-- Build tool: Maven Wrapper (`./mvnw`)
+- Build tool: Gradle Wrapper (`./gradlew`)
 
 ## Local prerequisites
 
 - Git
 - Java 25
-- A shell environment that can execute `./mvnw`
+- A shell environment that can execute `./gradlew`
 
 ## Recommended workflow
 
@@ -27,19 +27,19 @@ Thanks for contributing to this repository.
 Run repository-wide verification before opening or updating a pull request:
 
 ```bash
-./mvnw -B -ntp clean verify
+./gradlew --no-daemon clean build
 ```
 
 If you only need a quicker compile check while iterating on build-related work:
 
 ```bash
-./mvnw -B -ntp clean compile
+./gradlew --no-daemon clean compileJava
 ```
 
 ## Dependency changes
 
-- Prefer managed dependency versions from the parent POM and imported BOMs.
-- Do not duplicate versions in module POM files when the parent already manages them.
+- Prefer managed dependency versions from the root build and imported BOMs.
+- Do not duplicate versions in module build files when the root build already manages them.
 - Keep test libraries in test scope.
 
 ## Code structure

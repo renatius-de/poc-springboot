@@ -35,7 +35,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: corretto
-          cache: maven
+          cache: gradle
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v6
@@ -44,18 +44,18 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Ensure Maven Wrapper is executable
-        run: chmod +x ./mvnw
+      - name: Ensure Gradle Wrapper is executable
+        run: chmod +x ./gradlew
 
-      - name: Build and verify with Maven Wrapper
+      - name: Build and verify with Gradle Wrapper
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./mvnw -B -ntp clean verify
+        run: ./gradlew --no-daemon clean build
 
-      - name: Upload Maven build output
+      - name: Upload Gradle build output
         uses: actions/upload-artifact@v7
         with:
-          name: maven-target
-          path: "**/target/"
+          name: gradle-build
+          path: "**/build/"
           if-no-files-found: error
           retention-days: 7
