@@ -48,6 +48,7 @@ subprojects {
         add("annotationProcessor", "org.projectlombok:lombok")
         add("annotationProcessor", "org.projectlombok:lombok-mapstruct-binding:0.2.0")
         add("annotationProcessor", "org.mapstruct:mapstruct-processor:1.6.3")
+        add("testRuntimeOnly", "org.junit.platform:junit-platform-launcher")
     }
 
     tasks.withType<JavaCompile>().configureEach {
