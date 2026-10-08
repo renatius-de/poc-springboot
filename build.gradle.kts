@@ -6,7 +6,7 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 plugins {
     id("org.springframework.boot") version "4.1.1" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    id("com.google.protobuf") version "0.9.5" apply false
+    id("com.google.protobuf") version "0.10.0" apply false
 }
 
 allprojects {
@@ -28,11 +28,11 @@ subprojects {
 
     extensions.configure<DependencyManagementExtension> {
         imports {
-            mavenBom("com.fasterxml.jackson:jackson-bom:2.21.7")
-            mavenBom("tools.jackson:jackson-bom:3.1.7")
+            mavenBom("com.fasterxml.jackson:jackson-bom:2.22.3")
+            mavenBom("tools.jackson:jackson-bom:3.2.3")
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.1")
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.3")
-            mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.0.3")
+            mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.1.1")
         }
         dependencies {
             dependency("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
@@ -40,7 +40,7 @@ subprojects {
             dependency("org.mapstruct:mapstruct:1.6.3")
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
             dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-            dependency("com.tngtech.archunit:archunit-junit5:1.5.0")
+            dependency("com.tngtech.archunit:archunit-junit5:1.5.1")
         }
     }
 
