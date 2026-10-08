@@ -19,7 +19,7 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "io.spring.dependency-management")
 
     extensions.configure<JavaPluginExtension> {

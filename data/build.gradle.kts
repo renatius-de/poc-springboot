@@ -1,9 +1,9 @@
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-flyway")
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-postgresql")
-    implementation("org.mapstruct:mapstruct")
+    api("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-flyway")
+    api("org.flywaydb:flyway-core")
+    api("org.flywaydb:flyway-database-postgresql")
+    api("org.mapstruct:mapstruct")
 
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
