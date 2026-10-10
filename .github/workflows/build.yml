@@ -79,4 +79,4 @@ jobs:
           path: app-artifact
 
       - name: Confirm build output is available
-        run: test -d app-artifact
+        run: test -n "$(find app-artifact -type f -name '*.jar' -print -quit)"
