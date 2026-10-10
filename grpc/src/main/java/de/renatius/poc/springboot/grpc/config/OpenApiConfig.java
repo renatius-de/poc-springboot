@@ -140,6 +140,8 @@ public class OpenApiConfig {
     } else {
       responses.addApiResponse("3 INVALID_ARGUMENT", error("Malformed id"));
     }
+    responses.addApiResponse("16 UNAUTHENTICATED", error("Authentication is required or the credentials are invalid"));
+    responses.addApiResponse("7 PERMISSION_DENIED", error("The caller is not allowed to perform this operation"));
     responses.addApiResponse("13 INTERNAL", error("Unexpected server error"));
     return responses;
   }

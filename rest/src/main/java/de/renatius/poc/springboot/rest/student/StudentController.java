@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import de.renatius.poc.springboot.data.dto.ApiErrorResponse;
+import de.renatius.poc.springboot.rest.config.ApiCommonResponses;
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.repository.StudentRepository;
@@ -20,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@ApiCommonResponses
 @Tag(name = "Students", description = "Student management")
 @RequestMapping("/api/students")
 public class StudentController {
@@ -53,9 +55,7 @@ public class StudentController {
         @ApiResponse(responseCode = "201", description = "Student created",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
       })
   @WithSpan
   @PostMapping
@@ -74,9 +74,7 @@ public class StudentController {
         @ApiResponse(responseCode = "200", description = "Student found",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDto.class))),
         @ApiResponse(responseCode = "404", description = "No student exists with the given id",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
       })
   @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
@@ -93,11 +91,9 @@ public class StudentController {
         @ApiResponse(responseCode = "200", description = "Student updated",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = StudentDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "No student exists with the given id",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
       })
   @WithSpan
   @PutMapping("/{id}")
@@ -121,9 +117,7 @@ public class StudentController {
   @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Student deleted"),
         @ApiResponse(responseCode = "404", description = "No student exists with the given id",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
       })
   @WithSpan
   @DeleteMapping("/{id}")
@@ -141,9 +135,7 @@ public class StudentController {
   @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Page of matching results"),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error",
-            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
       })
   @WithSpan
   @GetMapping("/search")
