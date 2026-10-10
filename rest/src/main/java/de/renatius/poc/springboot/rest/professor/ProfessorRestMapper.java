@@ -2,29 +2,24 @@ package de.renatius.poc.springboot.rest.professor;
 
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
-import de.renatius.poc.springboot.data.mapper.ProfessorMapper;
 import java.util.UUID;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-@Component
-public class ProfessorRestMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface ProfessorRestMapper {
 
-  private final ProfessorMapper delegate;
+  ProfessorDto toDto(Professor professor);
 
-  public ProfessorRestMapper(ProfessorMapper delegate) {
-    this.delegate = delegate;
-  }
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "courses", ignore = true)
+  Professor toEntityForCreate(ProfessorDto request);
 
-  public ProfessorDto toDto(Professor professor) {
-    return delegate.toDto(professor);
-  }
-
-  public Professor toEntityForCreate(ProfessorDto request) {
-    return delegate.toEntity(
-        new ProfessorDto(null, request.title(), request.firstName(), request.lastName()));
-  }
-
-  public Professor toEntityForUpdate(UUID id, ProfessorDto request) {
-    return delegate.toEntity(new ProfessorDto(id, request.title(), request.firstName(), request.lastName()));
-  }
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "title", source = "request.title")
+  @Mapping(target = "firstName", source = "request.firstName")
+  @Mapping(target = "lastName", source = "request.lastName")
+  @Mapping(target = "courses", ignore = true)
+  Professor toEntityForUpdate(UUID id, ProfessorDto request);
 }
