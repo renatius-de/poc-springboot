@@ -39,7 +39,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: corretto
-          cache: maven
+          cache: gradle
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v6
@@ -48,9 +48,10 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Ensure Maven Wrapper is executable
-        run: chmod +x ./mvnw
+      - name: Ensure Gradle Wrapper is executable
+        run: chmod +x ./gradlew
 
+<<<<<<< HEAD
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
@@ -93,3 +94,17 @@ jobs:
 
       - name: Confirm packaged JARs are available
         run: test -n "$(find app-artifact -type f -name '*.jar' -print -quit)"
+=======
+      - name: Build and verify with Gradle Wrapper
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew --no-daemon clean build
+
+      - name: Upload Gradle build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: gradle-build
+          path: "**/build/"
+          if-no-files-found: error
+          retention-days: 7
+>>>>>>> origin/main

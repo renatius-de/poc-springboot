@@ -1,0 +1,20 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: k6-load-test
+  namespace: load-testing
+  labels:
+    test-type: load
+spec:
+  content:
+    files:
+      - path: /data/test.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-test-script
+            key: test.js
+  container:
+    image: grafana/k6:0.54.0
+  steps:
+    - name: Run k6
+      shell: k6 run /data/test.js

@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grpc-postgres-credentials
+  namespace: load-testing
+  labels:
+    app.kubernetes.io/name: grpc-postgres
+    app.kubernetes.io/part-of: poc-springboot
+type: Opaque
+stringData:
+  POSTGRES_DB: grpcdb
+  POSTGRES_USER: grpc_app
+  POSTGRES_PASSWORD: grpc-local-password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-postgres
+  namespace: load-testing
+  labels:
+    app.kubernetes.io/name: grpc-postgres
+    app.kubernetes.io/part-of: poc-springboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grpc-postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grpc-postgres
+        app.kubernetes.io/part-of: poc-springboot
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:18-alpine
+          envFrom:
+            - secretRef:
+                name: grpc-postgres-credentials
+          ports:
+            - name: postgres
+              containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "grpc_app", "-d", "grpcdb"]
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 12
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-postgres-service
+  namespace: load-testing
+  labels:
+    app.kubernetes.io/name: grpc-postgres
+    app.kubernetes.io/part-of: poc-springboot
+spec:
+  selector:
+    app.kubernetes.io/name: grpc-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

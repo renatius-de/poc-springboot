@@ -3,8 +3,8 @@ WORKDIR /workspace
 
 COPY . .
 
-RUN ./mvnw -B -ntp -pl grpc -am package -DskipTests
-RUN APP_JAR="$(find grpc/target -maxdepth 1 -type f -name '*.jar' ! -name '*.original' | head -n 1)" \
+RUN ./gradlew --no-daemon :grpc:bootJar -x test
+RUN APP_JAR="$(find grpc/build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-plain.jar' | head -n 1)" \
     && test -n "$APP_JAR" \
     && cp "$APP_JAR" app.jar
 RUN java -Djarmode=layertools -jar app.jar extract

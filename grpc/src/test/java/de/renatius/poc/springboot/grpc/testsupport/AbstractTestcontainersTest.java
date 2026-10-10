@@ -23,7 +23,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 public abstract class AbstractTestcontainersTest {
 
   protected static final PostgreSQLContainer<?> postgresql =
-      new PostgreSQLContainer<>("postgres:17-alpine");
+      new PostgreSQLContainer<>("postgres:18-alpine");
 
   static {
     postgresql.start();
