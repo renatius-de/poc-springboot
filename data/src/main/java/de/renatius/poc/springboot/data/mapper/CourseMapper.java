@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.data.mapper;
 
+import de.renatius.poc.springboot.data.config.CentralMapperConfig;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
@@ -7,7 +8,7 @@ import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(config = CentralMapperConfig.class)
 public interface CourseMapper {
 
   @Mapping(target = "professorId", source = "professor.id")
