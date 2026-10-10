@@ -10,7 +10,6 @@ import de.renatius.poc.springboot.grpc.v1.SearchCoursesResponse;
 import de.renatius.poc.springboot.grpc.v1.SearchProfessorsResponse;
 import de.renatius.poc.springboot.grpc.v1.SearchStudentsResponse;
 import de.renatius.poc.springboot.grpc.v1.Student;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
@@ -18,20 +17,17 @@ import org.springframework.data.domain.Page;
 @Mapper(config = CentralMapperConfig.class)
 public interface AcademicGrpcMapper {
 
-  @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "firstName")
   @Mapping(target = "lastName")
   Student toProto(StudentDto dto);
 
-  @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "title", defaultValue = "")
   @Mapping(target = "firstName")
   @Mapping(target = "lastName")
   Professor toProto(ProfessorDto dto);
 
-  @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "name")
   @Mapping(target = "room", defaultValue = "")
