@@ -5,6 +5,8 @@ import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.repository.StudentRepository;
 import de.renatius.poc.springboot.rest.exception.ResourceNotFoundException;
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import java.net.URI;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ public class StudentController {
     this.mapper = mapper;
   }
 
+  @WithSpan
   @PostMapping
   public ResponseEntity<StudentDto> create(@RequestBody StudentDto request) {
     log.debug("StudentController.create invoked");
@@ -45,15 +48,17 @@ public class StudentController {
         .body(mapper.toDto(saved));
   }
 
+  @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
-  public StudentDto getById(@PathVariable UUID id) {
+  public StudentDto getById(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("StudentController.getById invoked");
     return mapper.toDto(
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", id)));
   }
 
+  @WithSpan
   @PutMapping("/{id}")
-  public StudentDto update(@PathVariable UUID id, @RequestBody StudentDto request) {
+  public StudentDto update(@SpanAttribute("id") @PathVariable UUID id, @RequestBody StudentDto request) {
     log.debug("StudentController.update invoked");
     validate(request);
     if (request.id() != null && !request.id().equals(id)) {
@@ -67,8 +72,9 @@ public class StudentController {
     return mapper.toDto(updated);
   }
 
+  @WithSpan
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+  public ResponseEntity<Void> delete(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("StudentController.delete invoked");
     Student existing =
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", id));
@@ -76,6 +82,7 @@ public class StudentController {
     return ResponseEntity.noContent().build();
   }
 
+  @WithSpan
   @GetMapping("/search")
   public Page<StudentDto> search(
       @RequestParam(name = "first_name", required = false) String firstName,

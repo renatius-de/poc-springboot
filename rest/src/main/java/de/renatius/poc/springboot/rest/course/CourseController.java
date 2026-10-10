@@ -6,6 +6,8 @@ import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.repository.CourseRepository;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
 import de.renatius.poc.springboot.rest.exception.ResourceNotFoundException;
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import java.net.URI;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -42,6 +44,7 @@ public class CourseController {
     this.mapper = mapper;
   }
 
+  @WithSpan
   @PostMapping
   public ResponseEntity<CourseDto> create(@RequestBody CourseDto request) {
     log.debug("CourseController.create invoked");
@@ -51,15 +54,17 @@ public class CourseController {
         .body(mapper.toDto(saved));
   }
 
+  @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
-  public CourseDto getById(@PathVariable UUID id) {
+  public CourseDto getById(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("CourseController.getById invoked");
     return mapper.toDto(
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id)));
   }
 
+  @WithSpan
   @PutMapping("/{id}")
-  public CourseDto update(@PathVariable UUID id, @RequestBody CourseDto request) {
+  public CourseDto update(@SpanAttribute("id") @PathVariable UUID id, @RequestBody CourseDto request) {
     log.debug("CourseController.update invoked");
     validate(request);
     if (request.id() != null && !request.id().equals(id)) {
@@ -74,8 +79,9 @@ public class CourseController {
     return mapper.toDto(updated);
   }
 
+  @WithSpan
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+  public ResponseEntity<Void> delete(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("CourseController.delete invoked");
     Course existing =
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
@@ -83,6 +89,7 @@ public class CourseController {
     return ResponseEntity.noContent().build();
   }
 
+  @WithSpan
   @GetMapping("/search")
   public Page<CourseDto> search(
       @RequestParam(name = "name", required = false) String name,

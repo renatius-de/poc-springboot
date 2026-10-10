@@ -5,6 +5,8 @@ import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
 import de.renatius.poc.springboot.rest.exception.ResourceNotFoundException;
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import java.net.URI;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ public class ProfessorController {
     this.mapper = mapper;
   }
 
+  @WithSpan
   @PostMapping
   public ResponseEntity<ProfessorDto> create(@RequestBody ProfessorDto request) {
     log.debug("ProfessorController.create invoked");
@@ -45,15 +48,17 @@ public class ProfessorController {
         .body(mapper.toDto(saved));
   }
 
+  @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
-  public ProfessorDto getById(@PathVariable UUID id) {
+  public ProfessorDto getById(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("ProfessorController.getById invoked");
     return mapper.toDto(
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id)));
   }
 
+  @WithSpan
   @PutMapping("/{id}")
-  public ProfessorDto update(@PathVariable UUID id, @RequestBody ProfessorDto request) {
+  public ProfessorDto update(@SpanAttribute("id") @PathVariable UUID id, @RequestBody ProfessorDto request) {
     log.debug("ProfessorController.update invoked");
     validate(request);
     if (request.id() != null && !request.id().equals(id)) {
@@ -68,8 +73,9 @@ public class ProfessorController {
     return mapper.toDto(updated);
   }
 
+  @WithSpan
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+  public ResponseEntity<Void> delete(@SpanAttribute("id") @PathVariable UUID id) {
     log.debug("ProfessorController.delete invoked");
     Professor existing =
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id));
@@ -77,6 +83,7 @@ public class ProfessorController {
     return ResponseEntity.noContent().build();
   }
 
+  @WithSpan
   @GetMapping("/search")
   public Page<ProfessorDto> search(
       @RequestParam(name = "first_name", required = false) String firstName,

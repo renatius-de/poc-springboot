@@ -22,6 +22,7 @@ import de.renatius.poc.springboot.grpc.v1.GetCourseRequest;
 import de.renatius.poc.springboot.grpc.v1.SearchCoursesRequest;
 import de.renatius.poc.springboot.grpc.v1.SearchCoursesResponse;
 import de.renatius.poc.springboot.grpc.v1.UpdateCourseRequest;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,6 +48,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
     this.grpcMapper = grpcMapper;
   }
 
+  @WithSpan
   @Override
   public void createCourse(
       CreateCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
@@ -70,6 +72,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
         });
   }
 
+  @WithSpan
   @Override
   public void getCourse(
       GetCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
@@ -83,6 +86,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
         });
   }
 
+  @WithSpan
   @Override
   public void updateCourse(
       UpdateCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
@@ -108,6 +112,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
         });
   }
 
+  @WithSpan
   @Override
   public void deleteCourse(DeleteCourseRequest request, StreamObserver<Empty> responseObserver) {
     log.debug("gRPC deleteCourse invoked");
@@ -121,6 +126,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
         });
   }
 
+  @WithSpan
   @Override
   public void searchCourses(
       SearchCoursesRequest request, StreamObserver<SearchCoursesResponse> responseObserver) {

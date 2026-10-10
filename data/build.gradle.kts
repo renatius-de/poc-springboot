@@ -4,6 +4,8 @@ dependencies {
     api("org.flywaydb:flyway-core")
     api("org.flywaydb:flyway-database-postgresql")
     api("org.mapstruct:mapstruct")
+    api("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations")
+    api("io.opentelemetry:opentelemetry-api")
 
     runtimeOnly("org.postgresql:postgresql")
 
