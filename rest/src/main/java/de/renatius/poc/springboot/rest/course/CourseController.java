@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import de.renatius.poc.springboot.data.dto.ApiErrorResponse;
 import de.renatius.poc.springboot.rest.config.ApiCommonResponses;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +61,7 @@ public class CourseController {
         @ApiResponse(responseCode = "201", description = "Course created",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
       })
   @WithSpan
   @PostMapping
@@ -80,7 +80,7 @@ public class CourseController {
         @ApiResponse(responseCode = "200", description = "Course found",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseDto.class))),
         @ApiResponse(responseCode = "404", description = "No course exists with the given id",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
       })
   @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
@@ -97,9 +97,9 @@ public class CourseController {
         @ApiResponse(responseCode = "200", description = "Course updated",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CourseDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class))),
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "404", description = "No course exists with the given id",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
       })
   @WithSpan
   @PutMapping("/{id}")
@@ -124,7 +124,7 @@ public class CourseController {
   @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Course deleted"),
         @ApiResponse(responseCode = "404", description = "No course exists with the given id",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
       })
   @WithSpan
   @DeleteMapping("/{id}")
@@ -142,7 +142,7 @@ public class CourseController {
   @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Page of matching results"),
         @ApiResponse(responseCode = "400", description = "Invalid request: blank or missing required field, unknown referenced id, malformed JSON, or constraint violation",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
       })
   @WithSpan
   @GetMapping("/search")

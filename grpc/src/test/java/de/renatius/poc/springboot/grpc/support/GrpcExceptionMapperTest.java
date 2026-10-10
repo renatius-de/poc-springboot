@@ -21,4 +21,15 @@ class GrpcExceptionMapperTest {
     assertThat(internal.getCode()).isEqualTo(Status.Code.INTERNAL);
     assertThat(internal.getDescription()).isEqualTo("Unexpected server error");
   }
+
+  @Test
+  void shouldAttachProblemDetailTrailer() {
+    var trailers = GrpcExceptionMapper.toTrailers(new UnauthenticatedException("no \"token\""));
+    String json = new String(trailers.get(GrpcExceptionMapper.PROBLEM_DETAIL_KEY), java.nio.charset.StandardCharsets.UTF_8);
+    assertThat(json)
+        .contains("\"status\":401")
+        .contains("\"title\":\"UNAUTHENTICATED\"")
+        .contains("\"detail\":\"no \\\"token\\\"\"")
+        .contains("\"type\":\"https://poc.renatius.de/problems/grpc/unauthenticated\"");
+  }
 }

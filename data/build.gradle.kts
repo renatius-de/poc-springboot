@@ -4,7 +4,6 @@ dependencies {
     api("org.flywaydb:flyway-core")
     api("org.flywaydb:flyway-database-postgresql")
     api("org.mapstruct:mapstruct")
-    api("com.fasterxml.jackson.core:jackson-annotations")
     api("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations")
     api("io.opentelemetry:opentelemetry-api")
 
