@@ -6,6 +6,7 @@ import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
 import java.util.UUID;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -20,9 +21,7 @@ public interface CourseMapper {
   CourseDto toDto(Course course);
 
   @BeanMapping(ignoreByDefault = true)
-  @Mapping(target = "id", source = "id")
-  @Mapping(target = "name", source = "name")
-  @Mapping(target = "room", source = "room")
+  @InheritInverseConfiguration
   @Mapping(target = "students", ignore = true)
   @Mapping(target = "professor", source = "professorId")
   Course toEntity(CourseDto courseDto);

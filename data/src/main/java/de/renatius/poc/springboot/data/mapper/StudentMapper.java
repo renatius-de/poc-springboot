@@ -4,6 +4,7 @@ import de.renatius.poc.springboot.data.config.CentralMapperConfig;
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,9 +18,7 @@ public interface StudentMapper {
   StudentDto toDto(Student student);
 
   @BeanMapping(ignoreByDefault = true)
-  @Mapping(target = "id", source = "id")
-  @Mapping(target = "firstName", source = "firstName")
-  @Mapping(target = "lastName", source = "lastName")
+  @InheritInverseConfiguration
   @Mapping(target = "courses", ignore = true)
   Student toEntity(StudentDto studentDto);
 }
