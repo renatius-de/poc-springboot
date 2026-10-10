@@ -1,0 +1,19 @@
+spring:
+  grpc:
+    server:
+      port: 9090
+      health:
+        enabled: true
+
+management:
+  server:
+    port: 8082
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
