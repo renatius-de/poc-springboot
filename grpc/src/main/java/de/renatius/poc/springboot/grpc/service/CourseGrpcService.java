@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.execute;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.notFound;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.parseUuid;
@@ -26,6 +27,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.grpc.server.service.GrpcService;
 
+@Slf4j
 @GrpcService
 public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
 
@@ -48,6 +50,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
   @Override
   public void createCourse(
       CreateCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
+    log.debug("gRPC createCourse invoked");
     execute(
         responseObserver,
         () -> {
@@ -70,6 +73,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
   @Override
   public void getCourse(
       GetCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
+    log.debug("gRPC getCourse invoked");
     execute(
         responseObserver,
         () -> {
@@ -82,6 +86,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
   @Override
   public void updateCourse(
       UpdateCourseRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Course> responseObserver) {
+    log.debug("gRPC updateCourse invoked");
     execute(
         responseObserver,
         () -> {
@@ -105,6 +110,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
 
   @Override
   public void deleteCourse(DeleteCourseRequest request, StreamObserver<Empty> responseObserver) {
+    log.debug("gRPC deleteCourse invoked");
     execute(
         responseObserver,
         () -> {
@@ -118,6 +124,7 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
   @Override
   public void searchCourses(
       SearchCoursesRequest request, StreamObserver<SearchCoursesResponse> responseObserver) {
+    log.debug("gRPC searchCourses invoked");
     execute(
         responseObserver,
         () -> {

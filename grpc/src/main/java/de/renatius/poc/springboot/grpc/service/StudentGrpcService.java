@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.execute;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.notFound;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.parseUuid;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.grpc.server.service.GrpcService;
 
+@Slf4j
 @GrpcService
 public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBase {
 
@@ -41,6 +43,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
 
   @Override
   public void createStudent(CreateStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
+    log.debug("gRPC createStudent invoked");
     execute(
         responseObserver,
         () -> {
@@ -54,6 +57,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
 
   @Override
   public void getStudent(GetStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
+    log.debug("gRPC getStudent invoked");
     execute(
         responseObserver,
         () -> {
@@ -66,6 +70,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
 
   @Override
   public void updateStudent(UpdateStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
+    log.debug("gRPC updateStudent invoked");
     execute(
         responseObserver,
         () -> {
@@ -83,6 +88,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
 
   @Override
   public void deleteStudent(DeleteStudentRequest request, StreamObserver<Empty> responseObserver) {
+    log.debug("gRPC deleteStudent invoked");
     execute(
         responseObserver,
         () -> {
@@ -96,6 +102,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
 
   @Override
   public void searchStudents(SearchStudentsRequest request, StreamObserver<SearchStudentsResponse> responseObserver) {
+    log.debug("gRPC searchStudents invoked");
     execute(
         responseObserver,
         () -> {

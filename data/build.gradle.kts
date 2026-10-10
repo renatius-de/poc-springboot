@@ -5,7 +5,6 @@ dependencies {
     api("org.flywaydb:flyway-database-postgresql")
     api("org.mapstruct:mapstruct")
 
-    compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

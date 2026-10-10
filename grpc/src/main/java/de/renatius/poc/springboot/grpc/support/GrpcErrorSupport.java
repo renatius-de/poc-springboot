@@ -5,7 +5,9 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class GrpcErrorSupport {
 
   private GrpcErrorSupport() {}
@@ -42,8 +44,10 @@ public final class GrpcErrorSupport {
       observer.onNext(response);
       observer.onCompleted();
     } catch (StatusRuntimeException exception) {
+      log.warn("gRPC call failed with status {}: {}", exception.getStatus().getCode(), exception.getStatus().getDescription());
       observer.onError(exception);
     } catch (Exception exception) {
+      log.error("Unexpected error while handling gRPC call", exception);
       observer.onError(
           Status.INTERNAL.withDescription("Unexpected server error").withCause(exception).asRuntimeException());
     }
