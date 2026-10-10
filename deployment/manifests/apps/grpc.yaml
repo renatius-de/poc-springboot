@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: grpc
     app.kubernetes.io/part-of: poc-springboot
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: grpc
@@ -89,10 +89,15 @@ metadata:
     app.kubernetes.io/name: grpc
     app.kubernetes.io/part-of: poc-springboot
 spec:
+  # Headless: DNS returns all pod IPs so gRPC clients can balance client-side
+  # (use target dns:///grpc-service.load-testing.svc.cluster.local:9090 with round_robin).
+  clusterIP: None
+  publishNotReadyAddresses: false
   selector:
     app.kubernetes.io/name: grpc
   ports:
     - name: grpc
+      appProtocol: kubernetes.io/h2c
       port: 9090
       targetPort: grpc
     - name: management
