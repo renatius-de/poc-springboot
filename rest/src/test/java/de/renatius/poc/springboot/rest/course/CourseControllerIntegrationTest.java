@@ -99,7 +99,7 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
                 .content(objectMapper.writeValueAsString(update)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status").value(400))
-        .andExpect(jsonPath("$.detail").exists());
+        .andExpect(jsonPath("$.message").exists());
   }
 
   @Test
@@ -135,13 +135,13 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
                 .content(objectMapper.writeValueAsString(invalid)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status").value(400))
-        .andExpect(jsonPath("$.detail").exists());
+        .andExpect(jsonPath("$.message").exists());
 
     mockMvc
         .perform(get("/api/courses/{id}", UUID.randomUUID()))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.status").value(404))
-        .andExpect(jsonPath("$.detail").exists());
+        .andExpect(jsonPath("$.message").exists());
   }
 
   @Test
@@ -155,7 +155,7 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status").value(400))
-        .andExpect(jsonPath("$.detail").exists());
+        .andExpect(jsonPath("$.message").exists());
   }
 
   @Test
@@ -176,6 +176,6 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
                 .content(objectMapper.writeValueAsString(update)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status").value(400))
-        .andExpect(jsonPath("$.detail").exists());
+        .andExpect(jsonPath("$.message").exists());
   }
 }
