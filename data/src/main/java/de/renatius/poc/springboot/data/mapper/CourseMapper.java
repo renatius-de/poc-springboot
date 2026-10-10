@@ -5,15 +5,24 @@ import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
 import java.util.UUID;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(config = CentralMapperConfig.class)
 public interface CourseMapper {
 
+  @BeanMapping(ignoreByDefault = true)
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "name", source = "name")
+  @Mapping(target = "room", source = "room")
   @Mapping(target = "professorId", source = "professor.id")
   CourseDto toDto(Course course);
 
+  @BeanMapping(ignoreByDefault = true)
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "name", source = "name")
+  @Mapping(target = "room", source = "room")
   @Mapping(target = "students", ignore = true)
   @Mapping(target = "professor", source = "professorId")
   Course toEntity(CourseDto courseDto);
