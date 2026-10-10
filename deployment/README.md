@@ -13,6 +13,7 @@ deployment/
 │   └── testkube/    # Testkube TestWorkflow
 ├── k6/                   # REST vs. gRPC benchmark scripts and proto/
 ├── testkube-values.yaml  # Helm values for Testkube
+├── prometheus-values.yaml # Helm values pointing Prometheus at Alertmanager
 ├── run-benchmark.sh      # REST vs. gRPC benchmark runner
 └── run-tests.sh
 ```
@@ -108,3 +109,13 @@ Results from a single local cluster are indicative only; repeat runs before draw
 helm uninstall testkube -n load-testing
 kubectl delete namespace load-testing
 ```
+
+## Alertmanager
+
+```bash
+kubectl apply -f manifests/observability/alertmanager.yaml
+helm upgrade --install prometheus prometheus-community/prometheus -n observability -f prometheus-values.yaml
+```
+
+Alertmanager is exposed in-cluster at `alertmanager.observability:9093`. Replace the placeholder webhook receiver in
+`manifests/observability/alertmanager.yaml` with a real email/Slack integration.

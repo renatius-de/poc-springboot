@@ -1,0 +1,11 @@
+# Helm values for the prometheus chart (prometheus-community/prometheus):
+# disables the bundled Alertmanager and points Prometheus at manifests/observability/alertmanager.yaml
+alertmanager:
+  enabled: false
+serverFiles:
+  prometheus.yml:
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+                - alertmanager.observability.svc.cluster.local:9093
