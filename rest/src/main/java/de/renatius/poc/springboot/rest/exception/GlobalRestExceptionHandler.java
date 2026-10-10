@@ -1,6 +1,5 @@
 package de.renatius.poc.springboot.rest.exception;
 
-import de.renatius.poc.springboot.data.dto.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import java.net.URI;
+import java.time.Instant;
+import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -20,11 +22,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
+  private static final String TYPE_BASE = "https://poc.renatius.de/problems/";
+
   @ExceptionHandler(ResourceNotFoundException.class)
-  ResponseEntity<ApiErrorResponse> handleNotFound(
-      ResourceNotFoundException exception, HttpServletRequest request) {
+  ProblemDetail handleNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
     log.warn("Resource not found: {}", exception.getMessage());
-    return build(HttpStatus.NOT_FOUND, exception.getMessage(), request.getRequestURI());
+    return problem(HttpStatus.NOT_FOUND, "Resource not found", "not-found", exception.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler({
@@ -32,30 +35,28 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     ConstraintViolationException.class,
     DataIntegrityViolationException.class
   })
-  ResponseEntity<ApiErrorResponse> handleBadRequest(Exception exception, HttpServletRequest request) {
+  ProblemDetail handleBadRequest(Exception exception, HttpServletRequest request) {
     log.warn("Bad request ({}): {}", exception.getClass().getSimpleName(), exception.getMessage());
     log.debug("Bad request stack trace", exception);
-    return build(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
+    return problem(HttpStatus.BAD_REQUEST, "Bad request", "bad-request", exception.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(UnauthorizedException.class)
-  ResponseEntity<ApiErrorResponse> handleUnauthorized(
-      UnauthorizedException exception, HttpServletRequest request) {
+  ProblemDetail handleUnauthorized(UnauthorizedException exception, HttpServletRequest request) {
     log.warn("Unauthorized: {}", exception.getMessage());
-    return build(HttpStatus.UNAUTHORIZED, exception.getMessage(), request.getRequestURI());
+    return problem(HttpStatus.UNAUTHORIZED, "Unauthorized", "unauthorized", exception.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(ForbiddenException.class)
-  ResponseEntity<ApiErrorResponse> handleForbidden(
-      ForbiddenException exception, HttpServletRequest request) {
+  ProblemDetail handleForbidden(ForbiddenException exception, HttpServletRequest request) {
     log.warn("Forbidden: {}", exception.getMessage());
-    return build(HttpStatus.FORBIDDEN, exception.getMessage(), request.getRequestURI());
+    return problem(HttpStatus.FORBIDDEN, "Forbidden", "forbidden", exception.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(Exception.class)
-  ResponseEntity<ApiErrorResponse> handleUnexpected(Exception exception, HttpServletRequest request) {
+  ProblemDetail handleUnexpected(Exception exception, HttpServletRequest request) {
     log.error("Unexpected error", exception);
-    return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected server error", request.getRequestURI());
+    return problem(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", "internal-error", "Unexpected server error", request.getRequestURI());
   }
 
   @Override
@@ -65,19 +66,32 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
       HttpHeaders headers,
       HttpStatusCode statusCode,
       WebRequest request) {
-    HttpStatus status = HttpStatus.resolve(statusCode.value());
-    String message = body instanceof ProblemDetail problem && problem.getDetail() != null
-        ? problem.getDetail()
-        : exception.getMessage();
-    String path = request instanceof ServletWebRequest web ? web.getRequest().getRequestURI() : null;
-    ApiErrorResponse response =
-        ApiErrorResponse.of(
-            statusCode.value(), status != null ? status.getReasonPhrase() : "Error", message, path);
-    return ResponseEntity.status(statusCode).headers(headers).body(response);
+    ProblemDetail problem =
+        body instanceof ProblemDetail existing
+            ? existing
+            : ProblemDetail.forStatusAndDetail(statusCode, exception.getMessage());
+    if (request instanceof ServletWebRequest web && problem.getInstance() == null) {
+      problem.setInstance(URI.create(web.getRequest().getRequestURI()));
+    }
+    enrich(problem);
+    return ResponseEntity.status(statusCode).headers(headers).body(problem);
   }
 
-  private ResponseEntity<ApiErrorResponse> build(HttpStatus status, String message, String path) {
-    return ResponseEntity.status(status)
-        .body(ApiErrorResponse.of(status.value(), status.getReasonPhrase(), message, path));
+  private static ProblemDetail problem(
+      HttpStatus status, String title, String typeSuffix, String detail, String path) {
+    ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
+    problem.setTitle(title);
+    problem.setType(URI.create(TYPE_BASE + typeSuffix));
+    problem.setInstance(URI.create(path));
+    enrich(problem);
+    return problem;
+  }
+
+  private static void enrich(ProblemDetail problem) {
+    problem.setProperty("timestamp", Instant.now().toString());
+    String traceId = MDC.get("traceId");
+    if (traceId != null) {
+      problem.setProperty("traceId", traceId);
+    }
   }
 }
