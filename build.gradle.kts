@@ -44,6 +44,10 @@ subprojects {
             dependency("com.tngtech.archunit:archunit-junit5:1.5.1")
             dependency("com.google.protobuf:protobuf-java:4.36.2")
             dependency("com.google.protobuf:protobuf-java-util:4.36.2")
+            dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+            dependency("org.springdoc:springdoc-openapi-starter-common:3.1.1")
+            dependency("io.swagger.core.v3:swagger-annotations-jakarta:2.2.55")
+            dependency("org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.1")
         }
     }
 

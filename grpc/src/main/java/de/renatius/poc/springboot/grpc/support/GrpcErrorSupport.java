@@ -43,13 +43,14 @@ public final class GrpcErrorSupport {
       T response = supplier.get();
       observer.onNext(response);
       observer.onCompleted();
-    } catch (StatusRuntimeException exception) {
-      log.warn("gRPC call failed with status {}: {}", exception.getStatus().getCode(), exception.getStatus().getDescription());
-      observer.onError(exception);
     } catch (Exception exception) {
-      log.error("Unexpected error while handling gRPC call", exception);
-      observer.onError(
-          Status.INTERNAL.withDescription("Unexpected server error").withCause(exception).asRuntimeException());
+      Status status = GrpcExceptionMapper.toStatus(exception);
+      if (status.getCode() == Status.Code.INTERNAL) {
+        log.error("Unexpected error while handling gRPC call", exception);
+      } else {
+        log.warn("gRPC call failed with status {}: {}", status.getCode(), status.getDescription());
+      }
+      observer.onError(GrpcExceptionMapper.toException(exception));
     }
   }
 }
