@@ -1,6 +1,6 @@
 package de.renatius.poc.springboot.grpc.support;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import io.grpc.Status;
 import org.junit.jupiter.api.Test;

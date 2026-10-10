@@ -41,3 +41,24 @@
 - Use the central `build` job in `.github/workflows/build.yml`, which runs the Gradle build once and publishes the `gradle-build` artifact via `actions/upload-artifact`.
 - Test, lint, and deploy jobs or workflows must consume that artifact via `actions/download-artifact` instead of running their own Gradle builds.
 - Prefer build-free analysis modes (for example CodeQL `build-mode: none`) over additional Gradle builds.
+
+## Unit & Integration Testing Conventions
+
+### Assertion Library Guidelines
+- **Mandatory Framework**: Use **AssertJ** (`org.assertj.core.api.Assertions.*`) for all test assertions.
+- **Static Import**: Use `import static org.assertj.core.api.Assertions.*;` in test classes.
+- **Forbidden Frameworks**: Do NOT use standard JUnit assertions (e.g., `org.junit.jupiter.api.Assertions.*`, `assertEquals`, `assertTrue`, `assertThrows`).
+
+### Rules & Standards
+1. **Fluent Syntax**: Always use fluent `assertThat(...)` and chain assertions.
+   - Equality: `assertThat(actual).isEqualTo(expected);`
+   - Boolean: `assertThat(condition).isTrue();`
+   - Nullability: `assertThat(object).isNotNull();`
+   - Collections: `assertThat(collection).hasSize(expectedSize).contains(expectedItem);`
+2. **Exception Handling**: Use `assertThatThrownBy(...)` or `assertThatCode(...)` instead of `assertThrows(...)`.
+   ```java
+   assertThatThrownBy(() -> service.doSomething())
+       .isInstanceOf(IllegalArgumentException.class)
+       .hasMessageContaining("invalid input");
+   ```
+3. **Keep Test Behavior**: Preserve test logic, conditions, edge cases, and behavior when updating assertions.
