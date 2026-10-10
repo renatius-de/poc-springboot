@@ -6,6 +6,7 @@ import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
 import java.util.UUID;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

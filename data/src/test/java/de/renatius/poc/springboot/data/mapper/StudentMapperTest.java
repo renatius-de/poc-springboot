@@ -34,6 +34,20 @@ class StudentMapperTest {
   }
 
   @Test
+  void inverseRoundTripIsStable() {
+    UUID id = UUID.randomUUID();
+    Student source = Student.builder().id(id).firstName("Grace").lastName("Hopper").build();
+
+    StudentDto dto = mapper.toDto(source);
+    Student roundTrip = mapper.toEntity(dto);
+
+    assertThat(roundTrip.getId()).isEqualTo(id);
+    assertThat(roundTrip.getFirstName()).isEqualTo("Grace");
+    assertThat(roundTrip.getLastName()).isEqualTo("Hopper");
+    assertThat(roundTrip.getCourses()).isEmpty();
+  }
+
+  @Test
   void toEntityHandlesNullValues() {
     Student entity = mapper.toEntity(new StudentDto(null, null, null));
 
