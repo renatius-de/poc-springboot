@@ -19,11 +19,9 @@ public interface CourseRestMapper {
   @Mapping(target = "professor", source = "professorId")
   Course toEntityForCreate(CourseDto request);
 
-  @Mapping(target = "id", source = "id")
-  @Mapping(target = "name", source = "request.name")
-  @Mapping(target = "room", source = "request.room")
   @Mapping(target = "students", ignore = true)
   @Mapping(target = "professor", source = "request.professorId")
+  @Mapping(target = "id", source = "id")
   Course toEntityForUpdate(UUID id, CourseDto request);
 
   default Professor mapProfessor(UUID professorId) {
