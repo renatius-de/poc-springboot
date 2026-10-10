@@ -3,6 +3,7 @@ package de.renatius.poc.springboot.grpc.mapper;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.dto.StudentDto;
+import de.renatius.poc.springboot.data.mapper.MapperSupport;
 import de.renatius.poc.springboot.grpc.v1.Course;
 import de.renatius.poc.springboot.grpc.v1.Professor;
 import de.renatius.poc.springboot.grpc.v1.SearchCoursesResponse;
@@ -22,23 +23,36 @@ public interface AcademicGrpcMapper {
   @Mapping(target = "id")
   @Mapping(target = "firstName")
   @Mapping(target = "lastName")
-  Student toProto(StudentDto dto);
+  Student toProtoInternal(StudentDto dto);
+
+  default Student toProto(StudentDto dto) {
+    return toProtoInternal(MapperSupport.requireSource(dto, "dto"));
+  }
 
   @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "title", defaultValue = "")
   @Mapping(target = "firstName")
   @Mapping(target = "lastName")
-  Professor toProto(ProfessorDto dto);
+  Professor toProtoInternal(ProfessorDto dto);
+
+  default Professor toProto(ProfessorDto dto) {
+    return toProtoInternal(MapperSupport.requireSource(dto, "dto"));
+  }
 
   @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "name")
   @Mapping(target = "room", defaultValue = "")
   @Mapping(target = "professorId")
-  Course toProto(CourseDto dto);
+  Course toProtoInternal(CourseDto dto);
+
+  default Course toProto(CourseDto dto) {
+    return toProtoInternal(MapperSupport.requireSource(dto, "dto"));
+  }
 
   default SearchStudentsResponse toStudentSearchResponse(Page<StudentDto> page) {
+    MapperSupport.requireSource(page, "page");
     SearchStudentsResponse.Builder builder =
         SearchStudentsResponse.newBuilder()
             .setTotalElements(page.getTotalElements())
@@ -50,6 +64,7 @@ public interface AcademicGrpcMapper {
   }
 
   default SearchProfessorsResponse toProfessorSearchResponse(Page<ProfessorDto> page) {
+    MapperSupport.requireSource(page, "page");
     SearchProfessorsResponse.Builder builder =
         SearchProfessorsResponse.newBuilder()
             .setTotalElements(page.getTotalElements())
@@ -61,6 +76,7 @@ public interface AcademicGrpcMapper {
   }
 
   default SearchCoursesResponse toCourseSearchResponse(Page<CourseDto> page) {
+    MapperSupport.requireSource(page, "page");
     SearchCoursesResponse.Builder builder =
         SearchCoursesResponse.newBuilder()
             .setTotalElements(page.getTotalElements())

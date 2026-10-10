@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.rest.professor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
@@ -17,7 +18,7 @@ class ProfessorRestMapperTest {
     Professor entity =
         Professor.builder().id(id).title("Dr.").firstName("Alan").lastName("T").build();
     assertThat(mapper.toDto(entity)).isEqualTo(new ProfessorDto(id, "Dr.", "Alan", "T"));
-    assertThat(mapper.toDto(null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toDto(null));
   }
 
   @Test
@@ -29,7 +30,7 @@ class ProfessorRestMapperTest {
     assertThat(entity.getFirstName()).isEqualTo("Alan");
     assertThat(entity.getLastName()).isEqualTo("T");
     assertThat(entity.getCourses()).isEmpty();
-    assertThat(mapper.toEntityForCreate(null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toEntityForCreate(null));
   }
 
   @Test
@@ -39,6 +40,6 @@ class ProfessorRestMapperTest {
         mapper.toEntityForUpdate(id, new ProfessorDto(UUID.randomUUID(), "Dr.", "Alan", "T"));
     assertThat(entity.getId()).isEqualTo(id);
     assertThat(entity.getTitle()).isEqualTo("Dr.");
-    assertThat(mapper.toEntityForUpdate(null, null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toEntityForUpdate(null, null));
   }
 }

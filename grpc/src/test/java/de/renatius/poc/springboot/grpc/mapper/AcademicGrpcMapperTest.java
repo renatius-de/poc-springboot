@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.grpc.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
@@ -32,10 +33,10 @@ class AcademicGrpcMapperTest {
   }
 
   @Test
-  void mapsNullsToNull() {
-    assertThat(mapper.toProto((StudentDto) null)).isNull();
-    assertThat(mapper.toProto((ProfessorDto) null)).isNull();
-    assertThat(mapper.toProto((CourseDto) null)).isNull();
+  void rejectsNullSources() {
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toProto((StudentDto) null));
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toProto((ProfessorDto) null));
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toProto((CourseDto) null));
   }
 
   @Test

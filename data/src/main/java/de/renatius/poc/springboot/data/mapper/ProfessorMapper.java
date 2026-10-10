@@ -8,8 +8,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProfessorMapper {
 
-  ProfessorDto toDto(Professor professor);
+  default ProfessorDto toDto(Professor professor) {
+    return toDtoInternal(MapperSupport.requireSource(professor, "professor"));
+  }
+
+  ProfessorDto toDtoInternal(Professor professor);
+
+  default Professor toEntity(ProfessorDto professorDto) {
+    return toEntityInternal(MapperSupport.requireSource(professorDto, "professorDto"));
+  }
 
   @Mapping(target = "courses", ignore = true)
-  Professor toEntity(ProfessorDto professorDto);
+  Professor toEntityInternal(ProfessorDto professorDto);
 }
