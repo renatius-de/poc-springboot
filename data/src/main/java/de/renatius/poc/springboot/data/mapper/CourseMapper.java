@@ -10,12 +10,20 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
 
+  default CourseDto toDto(Course course) {
+    return toDtoInternal(MapperSupport.requireSource(course, "course"));
+  }
+
   @Mapping(target = "professorId", source = "professor.id")
-  CourseDto toDto(Course course);
+  CourseDto toDtoInternal(Course course);
+
+  default Course toEntity(CourseDto courseDto) {
+    return toEntityInternal(MapperSupport.requireSource(courseDto, "courseDto"));
+  }
 
   @Mapping(target = "students", ignore = true)
   @Mapping(target = "professor", source = "professorId")
-  Course toEntity(CourseDto courseDto);
+  Course toEntityInternal(CourseDto courseDto);
 
   default Professor mapProfessor(UUID professorId) {
     if (professorId == null) {

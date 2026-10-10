@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.rest.student;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
@@ -16,7 +17,7 @@ class StudentRestMapperTest {
     UUID id = UUID.randomUUID();
     Student entity = Student.builder().id(id).firstName("Ada").lastName("L").build();
     assertThat(mapper.toDto(entity)).isEqualTo(new StudentDto(id, "Ada", "L"));
-    assertThat(mapper.toDto(null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toDto(null));
   }
 
   @Test
@@ -26,7 +27,7 @@ class StudentRestMapperTest {
     assertThat(entity.getFirstName()).isEqualTo("Ada");
     assertThat(entity.getLastName()).isEqualTo("L");
     assertThat(entity.getCourses()).isEmpty();
-    assertThat(mapper.toEntityForCreate(null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toEntityForCreate(null));
   }
 
   @Test
@@ -36,6 +37,6 @@ class StudentRestMapperTest {
     assertThat(entity.getId()).isEqualTo(id);
     assertThat(entity.getFirstName()).isEqualTo("Ada");
     assertThat(entity.getLastName()).isEqualTo("L");
-    assertThat(mapper.toEntityForUpdate(null, null)).isNull();
+    assertThatIllegalArgumentException().isThrownBy(() -> mapper.toEntityForUpdate(null, null));
   }
 }
