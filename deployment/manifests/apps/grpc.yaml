@@ -16,6 +16,10 @@ spec:
       labels:
         app.kubernetes.io/name: grpc
         app.kubernetes.io/part-of: poc-springboot
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8082"
     spec:
       containers:
         - name: grpc

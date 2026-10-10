@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: poc-springboot
+  namespace: load-testing
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: poc-springboot
+  podMetricsEndpoints:
+    - port: management
+      path: /actuator/prometheus
+      interval: 15s
