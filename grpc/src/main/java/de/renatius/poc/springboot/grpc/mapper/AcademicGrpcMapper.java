@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.grpc.mapper;
 
+import de.renatius.poc.springboot.data.config.CentralMapperConfig;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.dto.StudentDto;
@@ -12,10 +13,9 @@ import de.renatius.poc.springboot.grpc.v1.Student;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
 import org.springframework.data.domain.Page;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(config = CentralMapperConfig.class)
 public interface AcademicGrpcMapper {
 
   @BeanMapping(ignoreByDefault = true)

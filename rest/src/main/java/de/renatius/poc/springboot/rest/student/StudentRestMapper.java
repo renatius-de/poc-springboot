@@ -1,13 +1,13 @@
 package de.renatius.poc.springboot.rest.student;
 
+import de.renatius.poc.springboot.data.config.CentralMapperConfig;
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(config = CentralMapperConfig.class)
 public interface StudentRestMapper {
 
   StudentDto toDto(Student student);
