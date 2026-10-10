@@ -33,9 +33,3 @@ logging:
   pattern:
     correlation: "[trace_id=%X{traceId} span_id=%X{spanId}] "
   include-application-name: true
-
-springdoc:
-  api-docs:
-    path: /rest/v3/api-docs
-  swagger-ui:
-    path: /rest/swagger-ui.html
