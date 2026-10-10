@@ -16,10 +16,7 @@ public interface ProfessorRestMapper {
   @Mapping(target = "courses", ignore = true)
   Professor toEntityForCreate(ProfessorDto request);
 
-  @Mapping(target = "id", source = "id")
-  @Mapping(target = "title", source = "request.title")
-  @Mapping(target = "firstName", source = "request.firstName")
-  @Mapping(target = "lastName", source = "request.lastName")
   @Mapping(target = "courses", ignore = true)
+  @Mapping(target = "id", source = "id")
   Professor toEntityForUpdate(UUID id, ProfessorDto request);
 }

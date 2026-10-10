@@ -16,9 +16,7 @@ public interface StudentRestMapper {
   @Mapping(target = "courses", ignore = true)
   Student toEntityForCreate(StudentDto request);
 
-  @Mapping(target = "id", source = "id")
-  @Mapping(target = "firstName", source = "request.firstName")
-  @Mapping(target = "lastName", source = "request.lastName")
   @Mapping(target = "courses", ignore = true)
+  @Mapping(target = "id", source = "id")
   Student toEntityForUpdate(UUID id, StudentDto request);
 }

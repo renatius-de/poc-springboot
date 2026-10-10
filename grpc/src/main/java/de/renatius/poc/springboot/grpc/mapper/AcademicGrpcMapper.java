@@ -26,7 +26,7 @@ public interface AcademicGrpcMapper {
 
   @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
-  @Mapping(target = "title", source = "title", defaultValue = "")
+  @Mapping(target = "title", defaultValue = "")
   @Mapping(target = "firstName")
   @Mapping(target = "lastName")
   Professor toProto(ProfessorDto dto);
@@ -34,7 +34,7 @@ public interface AcademicGrpcMapper {
   @BeanMapping(ignoreByDefault = true)
   @Mapping(target = "id")
   @Mapping(target = "name")
-  @Mapping(target = "room", source = "room", defaultValue = "")
+  @Mapping(target = "room", defaultValue = "")
   @Mapping(target = "professorId")
   Course toProto(CourseDto dto);
 
