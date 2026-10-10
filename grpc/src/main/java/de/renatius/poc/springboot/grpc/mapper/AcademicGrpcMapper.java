@@ -12,26 +12,27 @@ import de.renatius.poc.springboot.grpc.v1.SearchStudentsResponse;
 import de.renatius.poc.springboot.grpc.v1.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
-@Mapper(config = CentralMapperConfig.class)
+@Mapper(config = CentralMapperConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AcademicGrpcMapper {
 
-  @Mapping(target = "id")
-  @Mapping(target = "firstName")
-  @Mapping(target = "lastName")
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "firstName", source = "firstName")
+  @Mapping(target = "lastName", source = "lastName")
   Student toProto(StudentDto dto);
 
-  @Mapping(target = "id")
-  @Mapping(target = "title", defaultValue = "")
-  @Mapping(target = "firstName")
-  @Mapping(target = "lastName")
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "title", source = "title", defaultValue = "")
+  @Mapping(target = "firstName", source = "firstName")
+  @Mapping(target = "lastName", source = "lastName")
   Professor toProto(ProfessorDto dto);
 
-  @Mapping(target = "id")
-  @Mapping(target = "name")
-  @Mapping(target = "room", defaultValue = "")
-  @Mapping(target = "professorId")
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "name", source = "name")
+  @Mapping(target = "room", source = "room", defaultValue = "")
+  @Mapping(target = "professorId", source = "professorId")
   Course toProto(CourseDto dto);
 
   default SearchStudentsResponse toStudentSearchResponse(Page<StudentDto> page) {
