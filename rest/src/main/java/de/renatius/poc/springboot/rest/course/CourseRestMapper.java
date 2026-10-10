@@ -2,28 +2,36 @@ package de.renatius.poc.springboot.rest.course;
 
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
-import de.renatius.poc.springboot.data.mapper.CourseMapper;
+import de.renatius.poc.springboot.data.entity.Professor;
 import java.util.UUID;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-@Component
-public class CourseRestMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface CourseRestMapper {
 
-  private final CourseMapper delegate;
+  @Mapping(target = "professorId", source = "professor.id")
+  CourseDto toDto(Course course);
 
-  public CourseRestMapper(CourseMapper delegate) {
-    this.delegate = delegate;
-  }
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "students", ignore = true)
+  @Mapping(target = "professor", source = "professorId")
+  Course toEntityForCreate(CourseDto request);
 
-  public CourseDto toDto(Course course) {
-    return delegate.toDto(course);
-  }
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "name", source = "request.name")
+  @Mapping(target = "room", source = "request.room")
+  @Mapping(target = "students", ignore = true)
+  @Mapping(target = "professor", source = "request.professorId")
+  Course toEntityForUpdate(UUID id, CourseDto request);
 
-  public Course toEntityForCreate(CourseDto request) {
-    return delegate.toEntity(new CourseDto(null, request.name(), request.room(), request.professorId()));
-  }
-
-  public Course toEntityForUpdate(UUID id, CourseDto request) {
-    return delegate.toEntity(new CourseDto(id, request.name(), request.room(), request.professorId()));
+  default Professor mapProfessor(UUID professorId) {
+    if (professorId == null) {
+      return null;
+    }
+    Professor professor = new Professor();
+    professor.setId(professorId);
+    return professor;
   }
 }

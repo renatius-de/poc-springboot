@@ -2,28 +2,23 @@ package de.renatius.poc.springboot.rest.student;
 
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
-import de.renatius.poc.springboot.data.mapper.StudentMapper;
 import java.util.UUID;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-@Component
-public class StudentRestMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface StudentRestMapper {
 
-  private final StudentMapper delegate;
+  StudentDto toDto(Student student);
 
-  public StudentRestMapper(StudentMapper delegate) {
-    this.delegate = delegate;
-  }
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "courses", ignore = true)
+  Student toEntityForCreate(StudentDto request);
 
-  public StudentDto toDto(Student student) {
-    return delegate.toDto(student);
-  }
-
-  public Student toEntityForCreate(StudentDto request) {
-    return delegate.toEntity(new StudentDto(null, request.firstName(), request.lastName()));
-  }
-
-  public Student toEntityForUpdate(UUID id, StudentDto request) {
-    return delegate.toEntity(new StudentDto(id, request.firstName(), request.lastName()));
-  }
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "firstName", source = "request.firstName")
+  @Mapping(target = "lastName", source = "request.lastName")
+  @Mapping(target = "courses", ignore = true)
+  Student toEntityForUpdate(UUID id, StudentDto request);
 }

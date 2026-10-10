@@ -9,68 +9,65 @@ import de.renatius.poc.springboot.grpc.v1.SearchCoursesResponse;
 import de.renatius.poc.springboot.grpc.v1.SearchProfessorsResponse;
 import de.renatius.poc.springboot.grpc.v1.SearchStudentsResponse;
 import de.renatius.poc.springboot.grpc.v1.Student;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
 
-@Component
-public class AcademicGrpcMapper {
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface AcademicGrpcMapper {
 
-  public Student toProto(StudentDto dto) {
-    return Student.newBuilder()
-        .setId(dto.id().toString())
-        .setFirstName(dto.firstName())
-        .setLastName(dto.lastName())
-        .build();
-  }
+  @BeanMapping(ignoreByDefault = true)
+  @Mapping(target = "id")
+  @Mapping(target = "firstName")
+  @Mapping(target = "lastName")
+  Student toProto(StudentDto dto);
 
-  public Professor toProto(ProfessorDto dto) {
-    return Professor.newBuilder()
-        .setId(dto.id().toString())
-        .setTitle(dto.title() == null ? "" : dto.title())
-        .setFirstName(dto.firstName())
-        .setLastName(dto.lastName())
-        .build();
-  }
+  @BeanMapping(ignoreByDefault = true)
+  @Mapping(target = "id")
+  @Mapping(target = "title", source = "title", defaultValue = "")
+  @Mapping(target = "firstName")
+  @Mapping(target = "lastName")
+  Professor toProto(ProfessorDto dto);
 
-  public Course toProto(CourseDto dto) {
-    Course.Builder builder =
-        Course.newBuilder().setId(dto.id().toString()).setName(dto.name()).setRoom(dto.room() == null ? "" : dto.room());
-    if (dto.professorId() != null) {
-      builder.setProfessorId(dto.professorId().toString());
-    }
-    return builder.build();
-  }
+  @BeanMapping(ignoreByDefault = true)
+  @Mapping(target = "id")
+  @Mapping(target = "name")
+  @Mapping(target = "room", source = "room", defaultValue = "")
+  @Mapping(target = "professorId")
+  Course toProto(CourseDto dto);
 
-  public SearchStudentsResponse toStudentSearchResponse(Page<StudentDto> page) {
+  default SearchStudentsResponse toStudentSearchResponse(Page<StudentDto> page) {
     SearchStudentsResponse.Builder builder =
         SearchStudentsResponse.newBuilder()
             .setTotalElements(page.getTotalElements())
             .setTotalPages(page.getTotalPages())
             .setPage(page.getNumber())
             .setSize(page.getSize());
-    page.map(this::toProto).forEach(builder::addStudents);
+    page.forEach(dto -> builder.addStudents(toProto(dto)));
     return builder.build();
   }
 
-  public SearchProfessorsResponse toProfessorSearchResponse(Page<ProfessorDto> page) {
+  default SearchProfessorsResponse toProfessorSearchResponse(Page<ProfessorDto> page) {
     SearchProfessorsResponse.Builder builder =
         SearchProfessorsResponse.newBuilder()
             .setTotalElements(page.getTotalElements())
             .setTotalPages(page.getTotalPages())
             .setPage(page.getNumber())
             .setSize(page.getSize());
-    page.map(this::toProto).forEach(builder::addProfessors);
+    page.forEach(dto -> builder.addProfessors(toProto(dto)));
     return builder.build();
   }
 
-  public SearchCoursesResponse toCourseSearchResponse(Page<CourseDto> page) {
+  default SearchCoursesResponse toCourseSearchResponse(Page<CourseDto> page) {
     SearchCoursesResponse.Builder builder =
         SearchCoursesResponse.newBuilder()
             .setTotalElements(page.getTotalElements())
             .setTotalPages(page.getTotalPages())
             .setPage(page.getNumber())
             .setSize(page.getSize());
-    page.map(this::toProto).forEach(builder::addCourses);
+    page.forEach(dto -> builder.addCourses(toProto(dto)));
     return builder.build();
   }
 }
