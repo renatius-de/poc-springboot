@@ -45,12 +45,28 @@ spec:
               containerPort: 9090
             - name: management
               containerPort: 8081
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: management
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: management
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
           readinessProbe:
-            tcpSocket:
-              port: grpc
+            httpGet:
+              path: /actuator/health/readiness
+              port: management
+            initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 3
-            failureThreshold: 12
+            failureThreshold: 6
           volumeMounts:
             - name: tmp
               mountPath: /tmp
