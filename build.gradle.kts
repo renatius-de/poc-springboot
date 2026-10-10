@@ -47,6 +47,7 @@ subprojects {
     }
 
     dependencies {
+        add("compileOnly", "org.projectlombok:lombok")
         add("annotationProcessor", "org.projectlombok:lombok")
         add("annotationProcessor", "org.projectlombok:lombok-mapstruct-binding:0.2.0")
         add("annotationProcessor", "org.mapstruct:mapstruct-processor:1.6.3")

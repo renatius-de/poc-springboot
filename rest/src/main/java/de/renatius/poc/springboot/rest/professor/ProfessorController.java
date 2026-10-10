@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.rest.professor;
 
+import lombok.extern.slf4j.Slf4j;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/professors")
 public class ProfessorController {
@@ -36,6 +38,7 @@ public class ProfessorController {
 
   @PostMapping
   public ResponseEntity<ProfessorDto> create(@RequestBody ProfessorDto request) {
+    log.debug("ProfessorController.create invoked");
     validate(request);
     Professor saved = repository.save(mapper.toEntityForCreate(request));
     return ResponseEntity.created(URI.create("/api/professors/%s".formatted(saved.getId())))
@@ -44,12 +47,14 @@ public class ProfessorController {
 
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public ProfessorDto getById(@PathVariable UUID id) {
+    log.debug("ProfessorController.getById invoked");
     return mapper.toDto(
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id)));
   }
 
   @PutMapping("/{id}")
   public ProfessorDto update(@PathVariable UUID id, @RequestBody ProfessorDto request) {
+    log.debug("ProfessorController.update invoked");
     validate(request);
     if (request.id() != null && !request.id().equals(id)) {
       throw new IllegalArgumentException("Body id must match path id");
@@ -65,6 +70,7 @@ public class ProfessorController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    log.debug("ProfessorController.delete invoked");
     Professor existing =
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id));
     repository.delete(existing);
@@ -77,6 +83,7 @@ public class ProfessorController {
       @RequestParam(name = "last_name", required = false) String lastName,
       @PageableDefault(sort = {"lastName", "firstName"}, direction = Sort.Direction.ASC)
           Pageable pageable) {
+    log.debug("ProfessorController.search invoked");
     Specification<Professor> specification = alwaysTrue();
     if (firstName != null && !firstName.isBlank()) {
       specification = specification.and(likeIgnoreCase("firstName", firstName));

@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.execute;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.notFound;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.parseUuid;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.grpc.server.service.GrpcService;
 
+@Slf4j
 @GrpcService
 public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceImplBase {
 
@@ -45,6 +47,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
   public void createProfessor(
       CreateProfessorRequest request,
       StreamObserver<de.renatius.poc.springboot.grpc.v1.Professor> responseObserver) {
+    log.debug("gRPC createProfessor invoked");
     execute(
         responseObserver,
         () -> {
@@ -61,6 +64,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
   public void getProfessor(
       GetProfessorRequest request,
       StreamObserver<de.renatius.poc.springboot.grpc.v1.Professor> responseObserver) {
+    log.debug("gRPC getProfessor invoked");
     execute(
         responseObserver,
         () -> {
@@ -75,6 +79,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
   public void updateProfessor(
       UpdateProfessorRequest request,
       StreamObserver<de.renatius.poc.springboot.grpc.v1.Professor> responseObserver) {
+    log.debug("gRPC updateProfessor invoked");
     execute(
         responseObserver,
         () -> {
@@ -94,6 +99,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
 
   @Override
   public void deleteProfessor(DeleteProfessorRequest request, StreamObserver<Empty> responseObserver) {
+    log.debug("gRPC deleteProfessor invoked");
     execute(
         responseObserver,
         () -> {
@@ -108,6 +114,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
   @Override
   public void searchProfessors(
       SearchProfessorsRequest request, StreamObserver<SearchProfessorsResponse> responseObserver) {
+    log.debug("gRPC searchProfessors invoked");
     execute(
         responseObserver,
         () -> {

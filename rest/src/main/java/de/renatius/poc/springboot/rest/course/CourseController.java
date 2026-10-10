@@ -1,5 +1,6 @@
 package de.renatius.poc.springboot.rest.course;
 
+import lombok.extern.slf4j.Slf4j;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.repository.CourseRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
@@ -42,6 +44,7 @@ public class CourseController {
 
   @PostMapping
   public ResponseEntity<CourseDto> create(@RequestBody CourseDto request) {
+    log.debug("CourseController.create invoked");
     validate(request);
     Course saved = courseRepository.save(mapper.toEntityForCreate(request));
     return ResponseEntity.created(URI.create("/api/courses/%s".formatted(saved.getId())))
@@ -50,12 +53,14 @@ public class CourseController {
 
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public CourseDto getById(@PathVariable UUID id) {
+    log.debug("CourseController.getById invoked");
     return mapper.toDto(
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id)));
   }
 
   @PutMapping("/{id}")
   public CourseDto update(@PathVariable UUID id, @RequestBody CourseDto request) {
+    log.debug("CourseController.update invoked");
     validate(request);
     if (request.id() != null && !request.id().equals(id)) {
       throw new IllegalArgumentException("Body id must match path id");
@@ -71,6 +76,7 @@ public class CourseController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    log.debug("CourseController.delete invoked");
     Course existing =
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id));
     courseRepository.delete(existing);
@@ -81,6 +87,7 @@ public class CourseController {
   public Page<CourseDto> search(
       @RequestParam(name = "name", required = false) String name,
       @PageableDefault(sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+    log.debug("CourseController.search invoked");
     Specification<Course> specification = Specification.where(likeIgnoreCase("name", name));
     return courseRepository.findAll(specification, pageable).map(mapper::toDto);
   }
