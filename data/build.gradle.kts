@@ -7,6 +7,8 @@ dependencies {
     api("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations")
     api("io.opentelemetry:opentelemetry-api")
 
+    compileOnly("io.swagger.core.v3:swagger-annotations-jakarta")
+
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
