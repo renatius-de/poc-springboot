@@ -19,5 +19,5 @@ COPY --from=build /workspace/snapshot-dependencies/ ./
 COPY --from=build /workspace/application/ ./
 
 USER spring:spring
-EXPOSE 9090 8081
+EXPOSE 9090 8081 8082
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
