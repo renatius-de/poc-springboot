@@ -1,6 +1,6 @@
 package de.renatius.poc.springboot.data.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import de.renatius.poc.springboot.data.TestDataApplication;
 import de.renatius.poc.springboot.data.dto.CourseDto;
