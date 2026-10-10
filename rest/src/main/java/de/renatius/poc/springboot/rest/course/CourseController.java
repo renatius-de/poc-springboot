@@ -1,5 +1,9 @@
 package de.renatius.poc.springboot.rest.course;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@Tag(name = "Courses", description = "Course management")
 @RequestMapping("/api/courses")
 public class CourseController {
 
@@ -44,6 +49,11 @@ public class CourseController {
     this.mapper = mapper;
   }
 
+  @Operation(summary = "Create course")
+  @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+      })
   @WithSpan
   @PostMapping
   public ResponseEntity<CourseDto> create(@RequestBody CourseDto request) {
@@ -54,6 +64,11 @@ public class CourseController {
         .body(mapper.toDto(saved));
   }
 
+  @Operation(summary = "Get course by id")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public CourseDto getById(@SpanAttribute("id") @PathVariable UUID id) {
@@ -62,6 +77,12 @@ public class CourseController {
         courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course", id)));
   }
 
+  @Operation(summary = "Update course")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "Invalid request"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @PutMapping("/{id}")
   public CourseDto update(@SpanAttribute("id") @PathVariable UUID id, @RequestBody CourseDto request) {
@@ -79,6 +100,11 @@ public class CourseController {
     return mapper.toDto(updated);
   }
 
+  @Operation(summary = "Delete course")
+  @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@SpanAttribute("id") @PathVariable UUID id) {
@@ -89,6 +115,10 @@ public class CourseController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Search courses")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success")
+      })
   @WithSpan
   @GetMapping("/search")
   public Page<CourseDto> search(

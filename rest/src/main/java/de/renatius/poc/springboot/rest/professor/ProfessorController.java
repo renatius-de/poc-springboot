@@ -1,5 +1,9 @@
 package de.renatius.poc.springboot.rest.professor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@Tag(name = "Professors", description = "Professor management")
 @RequestMapping("/api/professors")
 public class ProfessorController {
 
@@ -38,6 +43,11 @@ public class ProfessorController {
     this.mapper = mapper;
   }
 
+  @Operation(summary = "Create professor")
+  @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+      })
   @WithSpan
   @PostMapping
   public ResponseEntity<ProfessorDto> create(@RequestBody ProfessorDto request) {
@@ -48,6 +58,11 @@ public class ProfessorController {
         .body(mapper.toDto(saved));
   }
 
+  @Operation(summary = "Get professor by id")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @GetMapping("/{id:[0-9a-fA-F\\-]{36}}")
   public ProfessorDto getById(@SpanAttribute("id") @PathVariable UUID id) {
@@ -56,6 +71,12 @@ public class ProfessorController {
         repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Professor", id)));
   }
 
+  @Operation(summary = "Update professor")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "400", description = "Invalid request"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @PutMapping("/{id}")
   public ProfessorDto update(@SpanAttribute("id") @PathVariable UUID id, @RequestBody ProfessorDto request) {
@@ -73,6 +94,11 @@ public class ProfessorController {
     return mapper.toDto(updated);
   }
 
+  @Operation(summary = "Delete professor")
+  @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Not found")
+      })
   @WithSpan
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@SpanAttribute("id") @PathVariable UUID id) {
@@ -83,6 +109,10 @@ public class ProfessorController {
     return ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Search professors")
+  @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Success")
+      })
   @WithSpan
   @GetMapping("/search")
   public Page<ProfessorDto> search(
