@@ -21,6 +21,7 @@ import de.renatius.poc.springboot.grpc.v1.SearchStudentsResponse;
 import de.renatius.poc.springboot.grpc.v1.StudentServiceGrpc;
 import de.renatius.poc.springboot.grpc.v1.UpdateStudentRequest;
 import de.renatius.poc.springboot.grpc.v1.DeleteStudentRequest;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
@@ -41,6 +42,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
     this.grpcMapper = grpcMapper;
   }
 
+  @WithSpan
   @Override
   public void createStudent(CreateStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
     log.debug("gRPC createStudent invoked");
@@ -55,6 +57,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
         });
   }
 
+  @WithSpan
   @Override
   public void getStudent(GetStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
     log.debug("gRPC getStudent invoked");
@@ -68,6 +71,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
         });
   }
 
+  @WithSpan
   @Override
   public void updateStudent(UpdateStudentRequest request, StreamObserver<de.renatius.poc.springboot.grpc.v1.Student> responseObserver) {
     log.debug("gRPC updateStudent invoked");
@@ -86,6 +90,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
         });
   }
 
+  @WithSpan
   @Override
   public void deleteStudent(DeleteStudentRequest request, StreamObserver<Empty> responseObserver) {
     log.debug("gRPC deleteStudent invoked");
@@ -100,6 +105,7 @@ public class StudentGrpcService extends StudentServiceGrpc.StudentServiceImplBas
         });
   }
 
+  @WithSpan
   @Override
   public void searchStudents(SearchStudentsRequest request, StreamObserver<SearchStudentsResponse> responseObserver) {
     log.debug("gRPC searchStudents invoked");

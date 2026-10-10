@@ -21,6 +21,7 @@ import de.renatius.poc.springboot.grpc.v1.ProfessorServiceGrpc;
 import de.renatius.poc.springboot.grpc.v1.SearchProfessorsRequest;
 import de.renatius.poc.springboot.grpc.v1.SearchProfessorsResponse;
 import de.renatius.poc.springboot.grpc.v1.UpdateProfessorRequest;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,6 +44,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
     this.grpcMapper = grpcMapper;
   }
 
+  @WithSpan
   @Override
   public void createProfessor(
       CreateProfessorRequest request,
@@ -60,6 +62,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
         });
   }
 
+  @WithSpan
   @Override
   public void getProfessor(
       GetProfessorRequest request,
@@ -75,6 +78,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
         });
   }
 
+  @WithSpan
   @Override
   public void updateProfessor(
       UpdateProfessorRequest request,
@@ -97,6 +101,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
         });
   }
 
+  @WithSpan
   @Override
   public void deleteProfessor(DeleteProfessorRequest request, StreamObserver<Empty> responseObserver) {
     log.debug("gRPC deleteProfessor invoked");
@@ -111,6 +116,7 @@ public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceI
         });
   }
 
+  @WithSpan
   @Override
   public void searchProfessors(
       SearchProfessorsRequest request, StreamObserver<SearchProfessorsResponse> responseObserver) {
