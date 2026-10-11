@@ -1,6 +1,6 @@
 package de.renatius.poc.springboot.restclient.configuration;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import de.renatius.poc.springboot.restclient.assertions.ApplicationClassAssert;
 import org.junit.jupiter.api.Test;
