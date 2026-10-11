@@ -6,7 +6,8 @@ applyTo: "**/src/test/**/*.java"
 
 ## Assertions
 
-- Use AssertJ for every test assertion and import it with `import static org.assertj.core.api.Assertions.*;`.
+- Use AssertJ for every test assertion. Import only the assertion methods used by that test, such
+  as `import static org.assertj.core.api.Assertions.assertThat;`; do not use wildcard static imports.
 - Do not use JUnit assertion methods or imports, including `assertEquals`, `assertTrue`,
   `assertFalse`, `assertNull`, `assertNotNull`, and `assertThrows`. JUnit annotations and
   lifecycle APIs are allowed.

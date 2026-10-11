@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.grpc.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;

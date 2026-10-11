@@ -1,6 +1,6 @@
 package de.renatius.poc.springboot.data.mapper;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import de.renatius.poc.springboot.data.dto.StudentDto;
 import de.renatius.poc.springboot.data.entity.Student;
