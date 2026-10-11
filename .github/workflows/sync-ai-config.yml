@@ -35,25 +35,27 @@ jobs:
 
       - name: Copy AI files
         run: |
-          mkdir -p .github/ai
           for file in skills.md instructions.md prompts.md; do
             if [ ! -f "dotfiles-source/ai/${file}" ]; then
               echo "::error::Missing ai/${file} in renatius-de/dotfiles"
               exit 1
             fi
-            cp "dotfiles-source/ai/${file}" ".github/ai/${file}"
+            cp "dotfiles-source/ai/${file}" ".github/${file}"
           done
           rm -rf dotfiles-source
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
-          add-paths: .github/ai/*.md
+          add-paths: |
+            .github/skills.md
+            .github/instructions.md
+            .github/prompts.md
           branch: chore/sync-ai-config
           commit-message: "chore(ai): sync AI config from dotfiles"
           title: "chore(ai): sync AI config from dotfiles"
           body: |
             Automated sync of `skills.md`, `instructions.md` and `prompts.md`
-            from the `ai` directory of `renatius-de/dotfiles` into `.github/ai/`.
+            from the `ai` directory of `renatius-de/dotfiles` into `.github/`.
           labels: dependencies
           delete-branch: true
