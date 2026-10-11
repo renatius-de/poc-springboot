@@ -1,0 +1,59 @@
+---
+name: Sync AI Config
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-ai-config
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Sync AI config from dotfiles
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Checkout dotfiles repository
+        uses: actions/checkout@v7
+        with:
+          repository: renatius-de/dotfiles
+          path: dotfiles-source
+          token: ${{ secrets.DOTFILES_TOKEN || github.token }}
+          sparse-checkout: ai
+          persist-credentials: false
+
+      - name: Copy AI files
+        run: |
+          mkdir -p .github/ai
+          for file in skills.md instructions.md prompts.md; do
+            if [ ! -f "dotfiles-source/ai/${file}" ]; then
+              echo "::error::Missing ai/${file} in renatius-de/dotfiles"
+              exit 1
+            fi
+            cp "dotfiles-source/ai/${file}" ".github/ai/${file}"
+          done
+          rm -rf dotfiles-source
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: .github/ai/*.md
+          branch: chore/sync-ai-config
+          commit-message: "chore(ai): sync AI config from dotfiles"
+          title: "chore(ai): sync AI config from dotfiles"
+          body: |
+            Automated sync of `skills.md`, `instructions.md` and `prompts.md`
+            from the `ai` directory of `renatius-de/dotfiles` into `.github/ai/`.
+          labels: dependencies
+          delete-branch: true
