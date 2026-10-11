@@ -37,7 +37,6 @@ jobs:
         run: |
           for dir in skills instructions prompts; do
             if [ ! -d "dotfiles-source/ai/${dir}" ]; then
-              echo "::warning::Directory ai/${dir} not found in renatius-de/dotfiles, skipping"
               continue
             fi
             mkdir -p ".github/${dir}"
