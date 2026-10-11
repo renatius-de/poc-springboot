@@ -11,6 +11,7 @@ import de.renatius.poc.springboot.rest.config.ApiCommonResponses;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
+import de.renatius.poc.springboot.data.specification.SearchSpecifications;
 import de.renatius.poc.springboot.rest.exception.ResourceNotFoundException;
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -148,20 +149,18 @@ public class ProfessorController {
     log.debug("ProfessorController.search invoked");
     Specification<Professor> specification = alwaysTrue();
     if (firstName != null && !firstName.isBlank()) {
-      specification = specification.and(likeIgnoreCase("firstName", firstName));
+      specification =
+          specification.and(SearchSpecifications.likeIgnoreCase("firstName", firstName));
     }
     if (lastName != null && !lastName.isBlank()) {
-      specification = specification.and(likeIgnoreCase("lastName", lastName));
+      specification =
+          specification.and(SearchSpecifications.likeIgnoreCase("lastName", lastName));
     }
     return repository.findAll(specification, pageable).map(mapper::toDto);
   }
 
   private static Specification<Professor> alwaysTrue() {
     return (root, query, cb) -> cb.conjunction();
-  }
-
-  private static Specification<Professor> likeIgnoreCase(String field, String value) {
-    return (root, query, cb) -> cb.like(cb.lower(root.get(field)), "%" + value.toLowerCase() + "%");
   }
 
   private static void validate(ProfessorDto request) {

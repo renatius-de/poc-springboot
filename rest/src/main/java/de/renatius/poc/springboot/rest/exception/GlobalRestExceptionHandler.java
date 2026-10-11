@@ -36,9 +36,10 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     DataIntegrityViolationException.class
   })
   ProblemDetail handleBadRequest(Exception exception, HttpServletRequest request) {
-    log.warn("Bad request ({}): {}", exception.getClass().getSimpleName(), exception.getMessage());
+    String detail = badRequestDetail(exception);
+    log.warn("Bad request ({}): {}", exception.getClass().getSimpleName(), detail);
     log.debug("Bad request stack trace", exception);
-    return problem(HttpStatus.BAD_REQUEST, "Bad request", "bad-request", exception.getMessage(), request.getRequestURI());
+    return problem(HttpStatus.BAD_REQUEST, "Bad request", "bad-request", detail, request.getRequestURI());
   }
 
   @ExceptionHandler(UnauthorizedException.class)
@@ -85,6 +86,13 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     problem.setInstance(URI.create(path));
     enrich(problem);
     return problem;
+  }
+
+  private static String badRequestDetail(Exception exception) {
+    if (exception instanceof DataIntegrityViolationException) {
+      return "Request violates a data constraint";
+    }
+    return exception.getMessage();
   }
 
   private static void enrich(ProblemDetail problem) {

@@ -91,6 +91,22 @@ class StudentGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
   }
 
   @Test
+  void shouldTreatLikeWildcardsAsLiteralSearchText() {
+    studentRepository.save(Student.builder().firstName("A%la").lastName("Lovelace").build());
+    studentRepository.save(Student.builder().firstName("Aala").lastName("Lovelace").build());
+
+    var response =
+        client.searchStudents(
+            SearchStudentsRequest.newBuilder()
+                .setFirstName("%")
+                .setPage(SearchPageRequest.newBuilder().setPage(0).setSize(10).build())
+                .build());
+
+    assertThat(response.getStudentsCount()).isEqualTo(1);
+    assertThat(response.getStudents(0).getFirstName()).isEqualTo("A%la");
+  }
+
+  @Test
   void shouldReturnInvalidArgumentForBlankFirstName() {
     assertThatThrownBy(
             () ->

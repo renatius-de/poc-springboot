@@ -12,6 +12,7 @@ import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.repository.CourseRepository;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
+import de.renatius.poc.springboot.data.specification.SearchSpecifications;
 import de.renatius.poc.springboot.rest.exception.ResourceNotFoundException;
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -150,15 +151,9 @@ public class CourseController {
       @RequestParam(name = "name", required = false) String name,
       @PageableDefault(sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
     log.debug("CourseController.search invoked");
-    Specification<Course> specification = Specification.where(likeIgnoreCase("name", name));
+    Specification<Course> specification =
+        Specification.where(SearchSpecifications.likeIgnoreCase("name", name));
     return courseRepository.findAll(specification, pageable).map(mapper::toDto);
-  }
-
-  private Specification<Course> likeIgnoreCase(String field, String value) {
-    if (value == null || value.isBlank()) {
-      return null;
-    }
-    return (root, query, cb) -> cb.like(cb.lower(root.get(field)), "%" + value.toLowerCase() + "%");
   }
 
   private void validate(CourseDto request) {

@@ -16,7 +16,6 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,13 +28,11 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 public class Course {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @EqualsAndHashCode.Include
   @ToString.Include
   private UUID id;
 
@@ -83,5 +80,21 @@ public class Course {
       return;
     }
     student.getCourses().remove(this);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (!(other instanceof Course course)) {
+      return false;
+    }
+    return getId() != null && getId().equals(course.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Course.class.hashCode();
   }
 }
