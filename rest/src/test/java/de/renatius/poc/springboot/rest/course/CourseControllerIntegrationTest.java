@@ -125,6 +125,24 @@ class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
   }
 
   @Test
+  void shouldTreatLikeWildcardsAsLiteralSearchText() throws Exception {
+    courseRepository.save(Course.builder().name("Course_100%_One").build());
+    courseRepository.save(Course.builder().name("CourseX100XOne").build());
+
+    mockMvc
+        .perform(get("/api/courses/search").param("name", "%"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content.length()").value(1))
+        .andExpect(jsonPath("$.content[0].name").value("Course_100%_One"));
+
+    mockMvc
+        .perform(get("/api/courses/search").param("name", "_"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content.length()").value(1))
+        .andExpect(jsonPath("$.content[0].name").value("Course_100%_One"));
+  }
+
+  @Test
   void shouldReturnProblemDetailForBadRequestAndNotFound() throws Exception {
     CourseDto invalid = new CourseDto(null, "", "A-101", UUID.randomUUID());
 
