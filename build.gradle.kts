@@ -4,7 +4,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
-    id("org.springframework.boot") version "4.1.1" apply false
+    id("org.springframework.boot") version "4.1.2" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("com.google.protobuf") version "0.10.0" apply false
 }
@@ -28,11 +28,11 @@ subprojects {
 
     extensions.configure<DependencyManagementExtension> {
         imports {
-            mavenBom("com.fasterxml.jackson:jackson-bom:2.22.3")
-            mavenBom("tools.jackson:jackson-bom:3.2.3")
-            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.1")
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.3")
-            mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.1.1")
+            mavenBom("com.fasterxml.jackson:jackson-bom:2.22.4")
+            mavenBom("tools.jackson:jackson-bom:3.2.4")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.2")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.4")
+            mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.1.2")
         }
         dependencies {
             dependency("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
