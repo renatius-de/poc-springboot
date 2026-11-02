@@ -37,17 +37,17 @@ subprojects {
         dependencies {
             dependency("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
             dependency("org.testcontainers:testcontainers-postgresql:2.0.5")
-            dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.32.0")
+            dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.33.1")
             dependency("org.mapstruct:mapstruct:1.6.3")
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
             dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
             dependency("com.tngtech.archunit:archunit-junit5:1.5.1")
             dependency("com.google.protobuf:protobuf-java:4.36.2")
             dependency("com.google.protobuf:protobuf-java-util:4.36.2")
-            dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
-            dependency("org.springdoc:springdoc-openapi-starter-common:3.1.1")
+            dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
+            dependency("org.springdoc:springdoc-openapi-starter-common:3.2.0")
             dependency("io.swagger.core.v3:swagger-annotations-jakarta:2.2.55")
-            dependency("org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.1")
+            dependency("org.springdoc:springdoc-openapi-starter-webmvc-api:3.2.0")
         }
     }
 
