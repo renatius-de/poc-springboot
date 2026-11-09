@@ -6,7 +6,7 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 plugins {
     id("org.springframework.boot") version "4.1.2" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    id("com.google.protobuf") version "0.10.0" apply false
+    id("com.google.protobuf") version "0.10.1" apply false
 }
 
 allprojects {
