@@ -28,8 +28,8 @@ subprojects {
 
     extensions.configure<DependencyManagementExtension> {
         imports {
-            mavenBom("com.fasterxml.jackson:jackson-bom:2.22.4")
-            mavenBom("tools.jackson:jackson-bom:3.2.4")
+            mavenBom("com.fasterxml.jackson:jackson-bom:2.23.0")
+            mavenBom("tools.jackson:jackson-bom:3.3.0")
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.2")
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.4")
             mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.1.2")
