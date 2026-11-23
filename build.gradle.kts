@@ -4,7 +4,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
-    id("org.springframework.boot") version "4.1.2" apply false
+    id("org.springframework.boot") version "4.2.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("com.google.protobuf") version "0.10.1" apply false
 }
@@ -30,14 +30,14 @@ subprojects {
         imports {
             mavenBom("com.fasterxml.jackson:jackson-bom:2.23.0")
             mavenBom("tools.jackson:jackson-bom:3.3.0")
-            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.2")
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.4")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.2.0")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2026.0.0")
             mavenBom("org.springframework.grpc:spring-grpc-dependencies:1.1.2")
         }
         dependencies {
             dependency("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
             dependency("org.testcontainers:testcontainers-postgresql:2.0.5")
-            dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.33.1")
+            dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.34.0")
             dependency("org.mapstruct:mapstruct:1.6.3")
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
             dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
@@ -46,7 +46,7 @@ subprojects {
             dependency("com.google.protobuf:protobuf-java-util:4.36.2")
             dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
             dependency("org.springdoc:springdoc-openapi-starter-common:3.2.0")
-            dependency("io.swagger.core.v3:swagger-annotations-jakarta:2.2.55")
+            dependency("io.swagger.core.v3:swagger-annotations-jakarta:2.2.56")
             dependency("org.springdoc:springdoc-openapi-starter-webmvc-api:3.2.0")
         }
     }
