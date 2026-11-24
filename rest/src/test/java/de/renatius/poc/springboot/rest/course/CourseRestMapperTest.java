@@ -1,16 +1,18 @@
 package de.renatius.poc.springboot.rest.course;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
-import java.util.UUID;
-import org.junit.jupiter.api.Test;
 
 class CourseRestMapperTest {
 
-  private final CourseRestMapper mapper = new CourseRestMapperImpl();
+  private final CourseRestMapper mapper = Mappers.getMapper(CourseRestMapper.class);
 
   @Test
   void toDtoWithAndWithoutProfessor() {

@@ -1,7 +1,13 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.repository.StudentRepository;
@@ -13,19 +19,23 @@ import de.renatius.poc.springboot.grpc.v1.SearchPageRequest;
 import de.renatius.poc.springboot.grpc.v1.SearchStudentsRequest;
 import de.renatius.poc.springboot.grpc.v1.StudentServiceGrpc;
 import de.renatius.poc.springboot.grpc.v1.UpdateStudentRequest;
+import io.grpc.BindableService;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 class StudentGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
+
+  @SuppressWarnings("unused")
+  @Autowired
+  StudentGrpcServiceIntegrationTest(List<BindableService> grpcServices) {
+    super(grpcServices);
+  }
 
   @Autowired private StudentRepository studentRepository;
 
   private StudentServiceGrpc.StudentServiceBlockingStub client;
 
+  @SuppressWarnings("unused")
   @BeforeEach
   void setUpClient() {
     client = StudentServiceGrpc.newBlockingStub(channel);

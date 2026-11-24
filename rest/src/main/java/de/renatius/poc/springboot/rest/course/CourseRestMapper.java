@@ -1,13 +1,14 @@
 package de.renatius.poc.springboot.rest.course;
 
+import java.util.UUID;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import de.renatius.poc.springboot.data.config.CentralMapperConfig;
 import de.renatius.poc.springboot.data.dto.CourseDto;
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
-import java.util.UUID;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(config = CentralMapperConfig.class)
 public interface CourseRestMapper {

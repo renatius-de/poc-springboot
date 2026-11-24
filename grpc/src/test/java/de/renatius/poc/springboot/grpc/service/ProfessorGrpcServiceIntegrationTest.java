@@ -1,7 +1,13 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import de.renatius.poc.springboot.data.entity.Professor;
 import de.renatius.poc.springboot.data.repository.ProfessorRepository;
@@ -15,10 +21,6 @@ import de.renatius.poc.springboot.grpc.v1.SearchProfessorsRequest;
 import de.renatius.poc.springboot.grpc.v1.UpdateProfessorRequest;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 class ProfessorGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
 
@@ -26,6 +28,13 @@ class ProfessorGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
 
   private ProfessorServiceGrpc.ProfessorServiceBlockingStub client;
 
+  @SuppressWarnings("unused")
+  @Autowired
+  ProfessorGrpcServiceIntegrationTest(ProfessorGrpcService professorGrpcService) {
+    super(List.of(professorGrpcService));
+  }
+
+  @SuppressWarnings("unused")
   @BeforeEach
   void setUpClient() {
     client = ProfessorServiceGrpc.newBlockingStub(channel);

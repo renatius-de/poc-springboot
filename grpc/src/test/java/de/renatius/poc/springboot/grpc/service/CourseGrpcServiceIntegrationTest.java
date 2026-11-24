@@ -1,7 +1,13 @@
 package de.renatius.poc.springboot.grpc.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import de.renatius.poc.springboot.data.entity.Course;
 import de.renatius.poc.springboot.data.entity.Professor;
@@ -17,18 +23,21 @@ import de.renatius.poc.springboot.grpc.v1.SearchPageRequest;
 import de.renatius.poc.springboot.grpc.v1.UpdateCourseRequest;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 class CourseGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
+
+  @SuppressWarnings("unused")
+  @Autowired
+  CourseGrpcServiceIntegrationTest(CourseGrpcService courseGrpcService) {
+    super(List.of(courseGrpcService));
+  }
 
   @Autowired private CourseRepository courseRepository;
   @Autowired private ProfessorRepository professorRepository;
 
   private CourseServiceGrpc.CourseServiceBlockingStub client;
 
+  @SuppressWarnings("unused")
   @BeforeEach
   void setUpClient() {
     client = CourseServiceGrpc.newBlockingStub(channel);
