@@ -12,5 +12,6 @@
   "search.exclude": {
     "**/build/**": true,
     "**/.gradle/**": true
-  }
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
 }
