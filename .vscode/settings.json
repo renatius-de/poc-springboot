@@ -1,7 +1,9 @@
 {
+  "java.import.gradle.enabled": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.import.gradle.wrapper.enabled": true,
   "java.import.gradle.version": "wrapper",
+  "java.import.gradle.offline.enabled": false,
   "java.import.maven.enabled": false,
   "files.watcherExclude": {
     "**/build/**": true,
