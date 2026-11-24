@@ -13,5 +13,12 @@
     "**/build/**": true,
     "**/.gradle/**": true
   },
-  "java.compile.nullAnalysis.mode": "automatic"
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.completion.importOrder": [
+    "#",
+    "de.renatius",
+    ""
+  ],
+  "java.sources.organizeImports.starThreshold": 99,
+  "java.sources.organizeImports.staticStarThreshold": 99
 }
