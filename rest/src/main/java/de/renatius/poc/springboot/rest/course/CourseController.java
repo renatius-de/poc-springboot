@@ -34,9 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Profile;
 
 @Slf4j
 @RestController
+@Profile("postgresql | (!mongodb & !postgresql)")
 @ApiCommonResponses
 @Tag(name = "Courses", description = "Course management")
 @RequestMapping("/api/courses")

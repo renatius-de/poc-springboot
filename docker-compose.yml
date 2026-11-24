@@ -16,12 +16,27 @@ services:
       retries: 20
       start_period: 5s
 
+  mongodb:
+    image: mongo:8
+    environment:
+      MONGO_INITDB_DATABASE: pocspringboot
+    ports:
+      - "27017:27017"
+    tmpfs:
+      - /data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
   rest:
     build:
       context: .
       dockerfile: docker/Dockerfile.rest
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: local,postgresql
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pocspringboot
       SPRING_DATASOURCE_USERNAME: app
       SPRING_DATASOURCE_PASSWORD: app
@@ -42,7 +57,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.grpc
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: local,postgresql
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pocspringboot
       SPRING_DATASOURCE_USERNAME: app
       SPRING_DATASOURCE_PASSWORD: app

@@ -26,9 +26,11 @@ import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.grpc.server.service.GrpcService;
+import org.springframework.context.annotation.Profile;
 
 @Slf4j
 @GrpcService
+@Profile("postgresql | (!mongodb & !postgresql)")
 public class ProfessorGrpcService extends ProfessorServiceGrpc.ProfessorServiceImplBase {
 
   private final ProfessorRepository professorRepository;

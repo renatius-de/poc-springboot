@@ -1,5 +1,6 @@
 dependencies {
     api("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("org.springframework.boot:spring-boot-starter-data-mongodb")
     api("org.springframework.boot:spring-boot-flyway")
     api("org.flywaydb:flyway-core")
     api("org.flywaydb:flyway-database-postgresql")

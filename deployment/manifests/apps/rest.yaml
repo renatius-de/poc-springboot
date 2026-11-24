@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: local
+              value: local,postgresql
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://rest-postgres-service:5432/restdb
             - name: SPRING_DATASOURCE_USERNAME
