@@ -57,7 +57,9 @@ class RepositoryIntegrationTest extends AbstractTestcontainersTest {
 
     List<Student> allStudents = studentRepository.findAll();
     assertThat(allStudents).hasSize(1);
-    assertThat(allStudents.getFirst().getCourses()).extracting(Course::getId).containsExactly(course.getId());
+    assertThat(allStudents.getFirst().getCourses())
+        .extracting(studentCourse -> studentCourse.getId())
+        .containsExactly(course.getId());
 
     ProfessorDto professorDto = professorMapper.toDto(professor);
     CourseDto courseDto = courseMapper.toDto(course);

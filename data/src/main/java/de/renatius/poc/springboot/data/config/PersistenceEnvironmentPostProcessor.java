@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.boot.EnvironmentPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.Ordered;
@@ -52,7 +53,7 @@ public final class PersistenceEnvironmentPostProcessor
     String configured = environment.getProperty(PROPERTY_NAME);
     if (configured != null && !configured.isBlank()) {
       Arrays.stream(configured.split(","))
-          .map(String::trim)
+          .map(value -> value.trim())
           .filter(value -> !value.isBlank())
           .forEach(exclusions::add);
     }

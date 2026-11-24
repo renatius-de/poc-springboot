@@ -1,11 +1,13 @@
 package de.renatius.poc.springboot.grpc.support;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+
+import org.slf4j.MDC;
+
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import org.slf4j.MDC;
 
 /** Maps arbitrary exceptions to standard gRPC statuses with a correlation trace id trailer. */
 public final class GrpcExceptionMapper {
@@ -26,22 +28,30 @@ public final class GrpcExceptionMapper {
       return exception.getStatus();
     }
     if (throwable instanceof UnauthenticatedException) {
-      return Status.UNAUTHENTICATED.withDescription(throwable.getMessage());
+      return Status.UNAUTHENTICATED.withDescription(description(throwable, "Unauthenticated"));
     }
     if (throwable instanceof PermissionDeniedException || throwable instanceof SecurityException) {
-      return Status.PERMISSION_DENIED.withDescription(throwable.getMessage());
+      return Status.PERMISSION_DENIED.withDescription(description(throwable, "Permission denied"));
     }
     if (throwable instanceof IllegalArgumentException) {
-      return Status.INVALID_ARGUMENT.withDescription(throwable.getMessage());
+      return Status.INVALID_ARGUMENT.withDescription(description(throwable, "Invalid argument"));
     }
     return Status.INTERNAL.withDescription("Unexpected server error").withCause(throwable);
   }
 
+  private static String description(Throwable throwable, String fallback) {
+    String message = throwable.getMessage();
+    return message == null || message.isBlank() ? fallback : message;
+  }
+
   public static Metadata toTrailers(Throwable throwable) {
-    Metadata trailers =
-        throwable instanceof StatusRuntimeException exception && exception.getTrailers() != null
-            ? exception.getTrailers()
-            : new Metadata();
+    Metadata trailers = new Metadata();
+    if (throwable instanceof StatusRuntimeException exception) {
+      Metadata exceptionTrailers = exception.getTrailers();
+      if (exceptionTrailers != null) {
+        trailers = exceptionTrailers;
+      }
+    }
     String traceId = MDC.get("traceId");
     if (traceId != null && !trailers.containsKey(TRACE_ID_KEY)) {
       trailers.put(TRACE_ID_KEY, traceId);
