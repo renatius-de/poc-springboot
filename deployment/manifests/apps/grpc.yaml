@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: local
+              value: local,postgresql
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://grpc-postgres-service:5432/grpcdb
             - name: SPRING_DATASOURCE_USERNAME

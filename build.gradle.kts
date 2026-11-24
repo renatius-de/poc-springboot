@@ -37,6 +37,7 @@ subprojects {
         dependencies {
             dependency("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
             dependency("org.testcontainers:testcontainers-postgresql:2.0.5")
+            dependency("org.testcontainers:testcontainers-mongodb:2.0.5")
             dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.34.0")
             dependency("org.mapstruct:mapstruct:1.6.3")
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
