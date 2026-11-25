@@ -1,6 +1,8 @@
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.testing.Test
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
@@ -70,5 +72,31 @@ subprojects {
 
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+    }
+
+    val sourceSets = extensions.getByType<SourceSetContainer>()
+    val integrationTest = sourceSets.create("integrationTest")
+    integrationTest.compileClasspath += sourceSets["main"].output
+    integrationTest.runtimeClasspath += sourceSets["main"].output
+    configurations["integrationTestImplementation"].extendsFrom(
+        configurations["implementation"],
+        configurations["testImplementation"]
+    )
+    configurations["integrationTestRuntimeOnly"].extendsFrom(
+        configurations["runtimeOnly"],
+        configurations["testRuntimeOnly"]
+    )
+
+    val integrationTestTask = tasks.register<Test>("integrationTest") {
+        description = "Runs integration tests with the *IT naming convention"
+        group = "verification"
+        testClassesDirs = integrationTest.output.classesDirs
+        classpath = integrationTest.runtimeClasspath
+        useJUnitPlatform()
+        include("**/*IT.class")
+    }
+
+    tasks.named("check") {
+        dependsOn(integrationTestTask)
     }
 }

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(classes = TestDataApplication.class)
 @Transactional
-class RepositoryIntegrationTest extends AbstractTestcontainersTest {
+class RepositoryIT extends AbstractTestcontainersTest {
 
   @Autowired private ProfessorRepository professorRepository;
   @Autowired private CourseRepository courseRepository;

@@ -22,7 +22,7 @@ import de.renatius.poc.springboot.grpc.v1.UpdateProfessorRequest;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
-class ProfessorGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
+class ProfessorGrpcServiceIT extends AbstractTestcontainersTest {
 
   @Autowired private ProfessorRepository professorRepository;
 
@@ -30,7 +30,7 @@ class ProfessorGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
 
   @SuppressWarnings("unused")
   @Autowired
-  ProfessorGrpcServiceIntegrationTest(ProfessorGrpcService professorGrpcService) {
+  ProfessorGrpcServiceIT(ProfessorGrpcService professorGrpcService) {
     super(List.of(professorGrpcService));
   }
 

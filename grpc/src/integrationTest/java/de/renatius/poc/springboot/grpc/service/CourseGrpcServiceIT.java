@@ -24,11 +24,11 @@ import de.renatius.poc.springboot.grpc.v1.UpdateCourseRequest;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
-class CourseGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
+class CourseGrpcServiceIT extends AbstractTestcontainersTest {
 
   @SuppressWarnings("unused")
   @Autowired
-  CourseGrpcServiceIntegrationTest(CourseGrpcService courseGrpcService) {
+  CourseGrpcServiceIT(CourseGrpcService courseGrpcService) {
     super(List.of(courseGrpcService));
   }
 

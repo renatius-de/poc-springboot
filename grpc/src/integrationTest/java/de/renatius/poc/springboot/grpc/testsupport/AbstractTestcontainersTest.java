@@ -8,9 +8,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import de.renatius.poc.springboot.grpc.GrpcApplication;
@@ -20,15 +22,25 @@ import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 
-@SpringBootTest(classes = GrpcApplication.class)
+@SpringBootTest(
+    classes = GrpcApplication.class,
+    properties =
+        "spring.autoconfigure.exclude="
+            + "org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration,"
+            + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoAutoConfiguration,"
+            + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoRepositoriesAutoConfiguration")
 @Transactional
+@ActiveProfiles("postgresql")
 public abstract class AbstractTestcontainersTest {
 
   protected static final PostgreSQLContainer POSTGRESQL =
       new PostgreSQLContainer("postgres:18-alpine");
+  protected static final MongoDBContainer MONGODB =
+      new MongoDBContainer("mongo:8").withReplicaSet();
 
   static {
     POSTGRESQL.start();
+    MONGODB.start();
   }
 
   @SuppressWarnings("unused")
@@ -37,6 +49,9 @@ public abstract class AbstractTestcontainersTest {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRESQL::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL::getPassword);
+    registry.add("spring.mongodb.uri", MONGODB::getConnectionString);
+    registry.add("spring.data.mongodb.uri", MONGODB::getConnectionString);
+    registry.add("spring.data.mongodb.database", () -> "test");
     registry.add("app.security.enabled", () -> "false");
   }
 
