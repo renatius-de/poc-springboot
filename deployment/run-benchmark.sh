@@ -25,8 +25,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "==> 1/5 Checking readiness of databases and applications"
-for dep in rest-postgres grpc-postgres rest grpc; do
+echo "==> 1/6 Checking readiness of databases and applications"
+for dep in rest-postgres grpc-postgres graphql-postgres rest grpc graphql; do
   kubectl -n "$NS" rollout status "deployment/$dep" --timeout=180s
 done
 kubectl -n "$NS" wait --for=condition=Ready pod --all \
@@ -37,10 +37,12 @@ kubectl -n "$NS" create configmap k6-benchmark-scripts \
   --from-file=common.js="$DIR/k6/common.js" \
   --from-file=test-rest.js="$DIR/k6/test-rest.js" \
   --from-file=test-grpc.js="$DIR/k6/test-grpc.js" \
+  --from-file=test-graphql.js="$DIR/k6/test-graphql.js" \
   --from-file=academic.proto="$DIR/k6/proto/academic.proto" \
   --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -f "$DIR/manifests/testkube/testworkflow-k6-rest.yaml"
 kubectl apply -f "$DIR/manifests/testkube/testworkflow-k6-grpc.yaml"
+kubectl apply -f "$DIR/manifests/testkube/testworkflow-k6-graphql.yaml"
 
 # Samples pod CPU/memory every 5s (needs metrics-server; best effort) and
 # records the peak values as "<cpu millicores> <memory MiB>".
@@ -86,33 +88,40 @@ run_benchmark() {
   mv "$json.tmp" "$json"
 }
 
-echo "==> 2/5 Running REST load test"
+echo "==> 2/6 Running REST load test"
 run_benchmark rest k6-rest-benchmark rest
 
-echo "==> 3/5 Cool-down for ${COOLDOWN_SECONDS}s"
+echo "==> 3/6 Cool-down for ${COOLDOWN_SECONDS}s"
 sleep "$COOLDOWN_SECONDS"
 
-echo "==> 4/5 Running gRPC load test (identical load profile)"
+echo "==> 4/6 Running gRPC load test (identical load profile)"
 run_benchmark grpc k6-grpc-benchmark grpc
 
-echo "==> 5/5 Comparison"
+echo "==> 5/6 Cool-down for ${COOLDOWN_SECONDS}s"
+sleep "$COOLDOWN_SECONDS"
+
+echo "==> 6/6 Running GraphQL load test (identical load profile)"
+run_benchmark graphql k6-graphql-benchmark graphql
+
+echo "==> Comparison"
 R="$RESULTS_DIR/rest.json"
 G="$RESULTS_DIR/grpc.json"
+Q="$RESULTS_DIR/graphql.json"
 
-row() { # label jq-path format
+row() {
   local label="$1" path="$2" fmt="$3"
-  local r g
+  local r g q
   r=$(jq -r "$path // 0" "$R")
   g=$(jq -r "$path // 0" "$G")
-  awk -v l="$label" -v r="$r" -v g="$g" -v f="$fmt" \
-    'BEGIN{ rv=sprintf(f,r); gv=sprintf(f,g); d=(r>0)?(g-r)/r*100:0;
-            printf "| %-26s | %14s | %14s | %+9.1f%% |\n", l, rv, gv, d }'
+  q=$(jq -r "$path // 0" "$Q")
+  awk -v l="$label" -v r="$r" -v g="$g" -v q="$q" -v f="$fmt" \
+    'BEGIN{ printf "| %-26s | %14s | %14s | %14s |\n", l, sprintf(f,r), sprintf(f,g), sprintf(f,q) }'
 }
 
-line="+----------------------------+----------------+----------------+------------+"
+line="+----------------------------+----------------+----------------+----------------+"
 {
   echo "$line"
-  printf "| %-26s | %14s | %14s | %10s |\n" "Metric" "REST" "gRPC" "gRPC vs REST"
+  printf "| %-26s | %14s | %14s | %14s |\n" "Metric" "REST" "gRPC" "GraphQL"
   echo "$line"
   row "Latency p50 (ms)" '.latency_ms.p50' '%.2f'
   row "Latency p90 (ms)" '.latency_ms.p90' '%.2f'
@@ -130,6 +139,8 @@ line="+----------------------------+----------------+----------------+----------
 rest_p95=$(jq -r '.latency_ms.p95 // 0' "$R"); grpc_p95=$(jq -r '.latency_ms.p95 // 0' "$G")
 rest_rps=$(jq -r '.throughput_rps // 0' "$R"); grpc_rps=$(jq -r '.throughput_rps // 0' "$G")
 rest_err=$(jq -r '.error_rate // 0' "$R"); grpc_err=$(jq -r '.error_rate // 0' "$G")
+graphql_p95=$(jq -r '.latency_ms.p95 // 0' "$Q"); graphql_rps=$(jq -r '.throughput_rps // 0' "$Q")
+graphql_err=$(jq -r '.error_rate // 0' "$Q")
 
 {
   echo

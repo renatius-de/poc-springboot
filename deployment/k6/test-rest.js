@@ -11,7 +11,12 @@ export const options = {
 };
 
 export function setup() {
-  const params = { headers: { 'Content-Type': 'application/json' } };
+  const params = {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': __ENV.APP_SECURITY_API_KEY || 'benchmark-api-key',
+    },
+  };
   for (let i = 0; i < SEED_STUDENTS; i++) {
     const res = http.post(
       `${BASE_URL}/api/students`,
@@ -25,7 +30,10 @@ export function setup() {
 export function searchStudents() {
   const res = http.get(
     `${BASE_URL}/api/students/search?first_name=Bench&page=0&size=${SEARCH_PAGE_SIZE}`,
-    { tags: { name: 'SearchStudents' } },
+    {
+      headers: { 'X-API-Key': __ENV.APP_SECURITY_API_KEY || 'benchmark-api-key' },
+      tags: { name: 'SearchStudents' },
+    },
   );
   check(res, {
     'status is 200': (r) => r.status === 200,

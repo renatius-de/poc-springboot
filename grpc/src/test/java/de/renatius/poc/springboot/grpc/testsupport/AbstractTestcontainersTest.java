@@ -37,6 +37,7 @@ public abstract class AbstractTestcontainersTest {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRESQL::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL::getPassword);
+    registry.add("app.security.enabled", () -> "false");
   }
 
   private final List<BindableService> bindableServices;

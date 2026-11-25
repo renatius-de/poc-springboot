@@ -1,0 +1,85 @@
+type Query {
+  student(id: ID!): Student
+  students(firstName: String, lastName: String, page: Int = 0, size: Int = 20): StudentPage
+
+  professor(id: ID!): Professor
+  professors(firstName: String, lastName: String, page: Int = 0, size: Int = 20): ProfessorPage
+
+  course(id: ID!): Course
+  courses(name: String, page: Int = 0, size: Int = 20): CoursePage
+}
+
+type Mutation {
+  createStudent(input: StudentInput!): Student
+  updateStudent(id: ID!, input: StudentInput!): Student
+  deleteStudent(id: ID!): Boolean
+
+  createProfessor(input: ProfessorInput!): Professor
+  updateProfessor(id: ID!, input: ProfessorInput!): Professor
+  deleteProfessor(id: ID!): Boolean
+
+  createCourse(input: CourseInput!): Course
+  updateCourse(id: ID!, input: CourseInput!): Course
+  deleteCourse(id: ID!): Boolean
+}
+
+type Student {
+  id: ID!
+  firstName: String!
+  lastName: String!
+}
+
+type Professor {
+  id: ID!
+  title: String
+  firstName: String!
+  lastName: String!
+}
+
+type Course {
+  id: ID!
+  name: String!
+  room: String
+  professorId: ID
+}
+
+type StudentPage {
+  content: [Student!]!
+  totalElements: Int!
+  totalPages: Int!
+  page: Int!
+  size: Int!
+}
+
+type ProfessorPage {
+  content: [Professor!]!
+  totalElements: Int!
+  totalPages: Int!
+  page: Int!
+  size: Int!
+}
+
+type CoursePage {
+  content: [Course!]!
+  totalElements: Int!
+  totalPages: Int!
+  page: Int!
+  size: Int!
+}
+
+input StudentInput {
+  firstName: String!
+  lastName: String!
+}
+
+input ProfessorInput {
+  title: String
+  firstName: String!
+  lastName: String!
+}
+
+input CourseInput {
+  name: String!
+  room: String
+  professorId: ID!
+}

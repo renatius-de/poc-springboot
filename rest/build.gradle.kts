@@ -8,6 +8,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
     implementation(project(":data"))
+    implementation(project(":security"))
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations")

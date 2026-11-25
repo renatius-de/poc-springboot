@@ -32,6 +32,8 @@ spec:
         value: grpc-service.load-testing.svc.cluster.local:9090
       - name: PROTO_DIR
         value: /data/k6/proto
+      - name: APP_SECURITY_API_KEY
+        value: benchmark-api-key
   steps:
     - name: Run k6 gRPC benchmark
       shell: k6 run /data/k6/test-grpc.js

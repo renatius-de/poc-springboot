@@ -1,0 +1,32 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: k6-graphql-benchmark
+  namespace: load-testing
+  labels:
+    test-type: benchmark
+    protocol: graphql
+spec:
+  content:
+    files:
+      - path: /data/k6/common.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: common.js
+      - path: /data/k6/test-graphql.js
+        contentFrom:
+          configMapKeyRef:
+            name: k6-benchmark-scripts
+            key: test-graphql.js
+  container:
+    image: grafana/k6:0.54.0
+    workingDir: /data/k6
+    env:
+      - name: GRAPHQL_URL
+        value: http://graphql-service.load-testing.svc.cluster.local:8084/graphql
+      - name: APP_SECURITY_API_KEY
+        value: benchmark-api-key
+  steps:
+    - name: Run k6 GraphQL benchmark
+      shell: k6 run /data/k6/test-graphql.js
