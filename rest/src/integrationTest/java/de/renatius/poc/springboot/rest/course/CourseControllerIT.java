@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-class CourseControllerIntegrationTest extends AbstractTestcontainersTest {
+class CourseControllerIT extends AbstractTestcontainersTest {
 
   private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   @Autowired private CourseRepository courseRepository;

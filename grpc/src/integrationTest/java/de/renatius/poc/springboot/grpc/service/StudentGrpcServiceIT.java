@@ -23,11 +23,11 @@ import io.grpc.BindableService;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
-class StudentGrpcServiceIntegrationTest extends AbstractTestcontainersTest {
+class StudentGrpcServiceIT extends AbstractTestcontainersTest {
 
   @SuppressWarnings("unused")
   @Autowired
-  StudentGrpcServiceIntegrationTest(List<BindableService> grpcServices) {
+  StudentGrpcServiceIT(List<BindableService> grpcServices) {
     super(grpcServices);
   }
 
