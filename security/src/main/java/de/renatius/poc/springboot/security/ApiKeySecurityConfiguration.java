@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -44,12 +46,9 @@ public class ApiKeySecurityConfiguration {
     return new CorsFilter(source);
   }
 
+  @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
   public static final class ApiKeyServletFilter extends OncePerRequestFilter {
     private final ApiKeyProperties properties;
-
-    ApiKeyServletFilter(ApiKeyProperties properties) {
-      this.properties = properties;
-    }
 
     @Override
     protected void doFilterInternal(

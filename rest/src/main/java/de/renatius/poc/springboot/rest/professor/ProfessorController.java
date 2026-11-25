@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import de.renatius.poc.springboot.rest.config.ApiCommonResponses;
 import de.renatius.poc.springboot.data.dto.ProfessorDto;
 import de.renatius.poc.springboot.data.entity.Professor;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.context.annotation.Profile;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @Profile("postgresql | (!mongodb & !postgresql)")
 @ApiCommonResponses
@@ -45,11 +47,6 @@ public class ProfessorController {
 
   private final ProfessorRepository repository;
   private final ProfessorRestMapper mapper;
-
-  public ProfessorController(ProfessorRepository repository, ProfessorRestMapper mapper) {
-    this.repository = repository;
-    this.mapper = mapper;
-  }
 
   @Operation(
       summary = "Create professor",
