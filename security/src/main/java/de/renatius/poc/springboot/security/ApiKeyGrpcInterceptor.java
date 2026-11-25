@@ -7,18 +7,16 @@ import io.grpc.ServerInterceptor;
 import io.grpc.Status;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.grpc.server.GlobalServerInterceptor;
+import lombok.RequiredArgsConstructor;
 
 @GlobalServerInterceptor
 @ConditionalOnProperty(prefix = "app.security", name = "enabled", havingValue = "true", matchIfMissing = true)
+@RequiredArgsConstructor
 public class ApiKeyGrpcInterceptor implements ServerInterceptor {
   private static final Metadata.Key<String> API_KEY =
       Metadata.Key.of("X-API-Key", Metadata.ASCII_STRING_MARSHALLER);
 
   private final ApiKeyProperties properties;
-
-  public ApiKeyGrpcInterceptor(ApiKeyProperties properties) {
-    this.properties = properties;
-  }
 
   @Override
   public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(

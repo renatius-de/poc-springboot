@@ -23,8 +23,10 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class AcademicController {
   private final StudentRepository studentRepository;
   private final ProfessorRepository professorRepository;
@@ -32,21 +34,6 @@ public class AcademicController {
   private final StudentMapper studentMapper;
   private final ProfessorMapper professorMapper;
   private final CourseMapper courseMapper;
-
-  public AcademicController(
-      StudentRepository studentRepository,
-      ProfessorRepository professorRepository,
-      CourseRepository courseRepository,
-      StudentMapper studentMapper,
-      ProfessorMapper professorMapper,
-      CourseMapper courseMapper) {
-    this.studentRepository = studentRepository;
-    this.professorRepository = professorRepository;
-    this.courseRepository = courseRepository;
-    this.studentMapper = studentMapper;
-    this.professorMapper = professorMapper;
-    this.courseMapper = courseMapper;
-  }
 
   @WithSpan
   @QueryMapping

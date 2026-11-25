@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.grpc.service;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.execute;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.notFound;
 import static de.renatius.poc.springboot.grpc.support.GrpcErrorSupport.parseUuid;
@@ -30,6 +31,7 @@ import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
 
 @Slf4j
+@RequiredArgsConstructor
 @GrpcService
 @Profile("postgresql | (!mongodb & !postgresql)")
 public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
@@ -38,17 +40,6 @@ public class CourseGrpcService extends CourseServiceGrpc.CourseServiceImplBase {
   private final ProfessorRepository professorRepository;
   private final CourseMapper courseMapper;
   private final AcademicGrpcMapper grpcMapper;
-
-  public CourseGrpcService(
-      CourseRepository courseRepository,
-      ProfessorRepository professorRepository,
-      CourseMapper courseMapper,
-      AcademicGrpcMapper grpcMapper) {
-    this.courseRepository = courseRepository;
-    this.professorRepository = professorRepository;
-    this.courseMapper = courseMapper;
-    this.grpcMapper = grpcMapper;
-  }
 
   @WithSpan
   @Override
