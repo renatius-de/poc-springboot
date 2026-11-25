@@ -4,11 +4,13 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.testing.Test
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+import info.solidsoft.gradle.pitest.PitestPluginExtension
 
 plugins {
     id("org.springframework.boot") version "4.2.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("com.google.protobuf") version "0.10.1" apply false
+    id("info.solidsoft.pitest") version "1.19.0" apply false
 }
 
 allprojects {
@@ -23,6 +25,20 @@ allprojects {
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "info.solidsoft.pitest")
+
+    extensions.configure<PitestPluginExtension> {
+        pitestVersion.set("1.30.2")
+        junit5PluginVersion.set("1.2.3")
+        addJUnitPlatformLauncher.set(false)
+        threads.set(4)
+        targetClasses.set(setOf("${project.group}.*"))
+        outputFormats.set(setOf("HTML", "XML"))
+    }
+
+    tasks.named("check") {
+        dependsOn("pitest")
+    }
 
     extensions.configure<JavaPluginExtension> {
         toolchain.languageVersion.set(JavaLanguageVersion.of(25))
