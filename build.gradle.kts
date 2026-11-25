@@ -57,6 +57,8 @@ subprojects {
         add("annotationProcessor", "org.projectlombok:lombok")
         add("annotationProcessor", "org.projectlombok:lombok-mapstruct-binding:0.2.0")
         add("annotationProcessor", "org.mapstruct:mapstruct-processor:1.6.3")
+        add("testCompileOnly", "org.projectlombok:lombok")
+        add("testAnnotationProcessor", "org.projectlombok:lombok")
         add("testRuntimeOnly", "org.junit.platform:junit-platform-launcher")
     }
 
