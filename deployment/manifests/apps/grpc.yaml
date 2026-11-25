@@ -1,3 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grpc-api-key
+  namespace: load-testing
+type: Opaque
+stringData:
+  APP_SECURITY_API_KEY: benchmark-api-key
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,6 +53,11 @@ spec:
               value: "9090"
             - name: SERVER_PORT
               value: "8081"
+            - name: APP_SECURITY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: grpc-api-key
+                  key: APP_SECURITY_API_KEY
           ports:
             - name: grpc
               containerPort: 9090

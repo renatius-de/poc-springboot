@@ -37,3 +37,8 @@ logging:
   pattern:
     correlation: "[trace_id=%X{traceId} span_id=%X{spanId}] "
   include-application-name: true
+
+app:
+  security:
+    api-key: ${APP_SECURITY_API_KEY:local-api-key}
+    cors-allowed-origins: ${APP_SECURITY_CORS_ALLOWED_ORIGINS:http://localhost:3000}

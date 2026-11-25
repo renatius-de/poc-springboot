@@ -9,12 +9,16 @@ ROOT_DIR="$(cd "$DIR/.." && pwd)"
 
 REST_DOCKERFILE="docker/Dockerfile.rest"
 GRPC_DOCKERFILE="docker/Dockerfile.grpc"
+GRAPHQL_DOCKERFILE="docker/Dockerfile.graphql"
 REST_IMAGE="poc-springboot-rest:local"
 GRPC_IMAGE="poc-springboot-grpc:local"
+GRAPHQL_IMAGE="poc-springboot-graphql:local"
 REST_POSTGRES_DEPLOYMENT="rest-postgres"
 GRPC_POSTGRES_DEPLOYMENT="grpc-postgres"
+GRAPHQL_POSTGRES_DEPLOYMENT="graphql-postgres"
 REST_DEPLOYMENT="rest"
 GRPC_DEPLOYMENT="grpc"
+GRAPHQL_DEPLOYMENT="graphql"
 
 case "$MODE" in
   k6|testkube) ;;
@@ -26,17 +30,22 @@ esac
 
 docker build --file "$ROOT_DIR/$REST_DOCKERFILE" --tag "$REST_IMAGE" "$ROOT_DIR"
 docker build --file "$ROOT_DIR/$GRPC_DOCKERFILE" --tag "$GRPC_IMAGE" "$ROOT_DIR"
+docker build --file "$ROOT_DIR/$GRAPHQL_DOCKERFILE" --tag "$GRAPHQL_IMAGE" "$ROOT_DIR"
 
 kubectl apply -f "$DIR/manifests/namespace"
 kubectl -n "$NS" delete deployment/postgres service/postgres --ignore-not-found
 kubectl apply -f "$DIR/manifests/apps/rest-postgres.yaml"
 kubectl apply -f "$DIR/manifests/apps/grpc-postgres.yaml"
+kubectl apply -f "$DIR/manifests/apps/graphql-postgres.yaml"
 kubectl -n "$NS" rollout status "deployment/$REST_POSTGRES_DEPLOYMENT" --timeout=180s
 kubectl -n "$NS" rollout status "deployment/$GRPC_POSTGRES_DEPLOYMENT" --timeout=180s
+kubectl -n "$NS" rollout status "deployment/$GRAPHQL_POSTGRES_DEPLOYMENT" --timeout=180s
 kubectl apply -f "$DIR/manifests/apps/rest.yaml"
 kubectl apply -f "$DIR/manifests/apps/grpc.yaml"
+kubectl apply -f "$DIR/manifests/apps/graphql.yaml"
 kubectl -n "$NS" rollout status "deployment/$REST_DEPLOYMENT" --timeout=180s
 kubectl -n "$NS" rollout status "deployment/$GRPC_DEPLOYMENT" --timeout=180s
+kubectl -n "$NS" rollout status "deployment/$GRAPHQL_DEPLOYMENT" --timeout=180s
 kubectl -n "$NS" wait --for=condition=Ready pod --all \
   -l app.kubernetes.io/part-of=poc-springboot --timeout=180s
 

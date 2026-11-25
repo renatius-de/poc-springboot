@@ -7,6 +7,7 @@ const PROTO_DIR = __ENV.PROTO_DIR || './proto';
 
 const client = new grpc.Client();
 client.load([PROTO_DIR], 'academic.proto');
+const API_KEY = __ENV.APP_SECURITY_API_KEY || 'benchmark-api-key';
 
 export const options = {
   scenarios: scenarios('searchStudents'),
@@ -21,10 +22,11 @@ const SERVICE = 'de.renatius.poc.springboot.grpc.v1.StudentService';
 export function setup() {
   client.connect(GRPC_ADDR, { plaintext: true });
   for (let i = 0; i < SEED_STUDENTS; i++) {
-    const res = client.invoke(`${SERVICE}/CreateStudent`, {
-      first_name: `Bench${i}`,
-      last_name: `Student${i}`,
-    });
+    const res = client.invoke(
+      `${SERVICE}/CreateStudent`,
+      { first_name: `Bench${i}`, last_name: `Student${i}` },
+      { metadata: { 'X-API-Key': API_KEY } },
+    );
     check(res, { 'seed created': (r) => r && r.status === grpc.StatusOK });
   }
   client.close();
@@ -35,10 +37,11 @@ export function searchStudents() {
     client.connect(GRPC_ADDR, { plaintext: true });
     connected = true;
   }
-  const res = client.invoke(`${SERVICE}/SearchStudents`, {
-    first_name: 'Bench',
-    page: { page: 0, size: SEARCH_PAGE_SIZE },
-  });
+  const res = client.invoke(
+    `${SERVICE}/SearchStudents`,
+    { first_name: 'Bench', page: { page: 0, size: SEARCH_PAGE_SIZE } },
+    { metadata: { 'X-API-Key': API_KEY } },
+  );
   check(res, {
     'status is OK': (r) => r && r.status === grpc.StatusOK,
     'has students': (r) => r && r.message && r.message.students !== undefined,

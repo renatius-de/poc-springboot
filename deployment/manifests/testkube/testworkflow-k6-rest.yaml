@@ -25,6 +25,8 @@ spec:
     env:
       - name: REST_URL
         value: http://rest-service.load-testing.svc.cluster.local:8080
+      - name: APP_SECURITY_API_KEY
+        value: benchmark-api-key
   steps:
     - name: Run k6 REST benchmark
       shell: k6 run /data/k6/test-rest.js
