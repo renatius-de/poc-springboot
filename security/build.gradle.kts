@@ -10,4 +10,9 @@ dependencies {
     compileOnly("org.apache.tomcat.embed:tomcat-embed-core")
     compileOnly("io.grpc:grpc-api")
     compileOnly("org.springframework.grpc:spring-grpc-core")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework:spring-webmvc")
+    testImplementation("jakarta.servlet:jakarta.servlet-api")
+    testImplementation("io.grpc:grpc-api")
 }

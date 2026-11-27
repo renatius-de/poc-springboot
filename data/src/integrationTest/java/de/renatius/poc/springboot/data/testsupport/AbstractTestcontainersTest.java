@@ -1,21 +1,32 @@
 package de.renatius.poc.springboot.data.testsupport;
 
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-@Testcontainers
 public abstract class AbstractTestcontainersTest {
 
-  @Container
-  @ServiceConnection
-  protected static final PostgreSQLContainer postgresql =
+  protected static final PostgreSQLContainer POSTGRESQL =
       new PostgreSQLContainer("postgres:18-alpine");
 
-  @Container
-  @ServiceConnection
-  protected static final MongoDBContainer mongodb =
+  protected static final MongoDBContainer MONGODB =
       new MongoDBContainer("mongo:8").withReplicaSet();
+
+  static {
+    POSTGRESQL.start();
+    MONGODB.start();
+  }
+
+  @SuppressWarnings("unused")
+  @DynamicPropertySource
+  static void registerDatabaseProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
+    registry.add("spring.datasource.username", POSTGRESQL::getUsername);
+    registry.add("spring.datasource.password", POSTGRESQL::getPassword);
+    registry.add("spring.mongodb.uri", MONGODB::getConnectionString);
+    registry.add("spring.data.mongodb.uri", MONGODB::getConnectionString);
+    registry.add("spring.mongodb.database", () -> "test");
+    registry.add("spring.mongodb.representation.uuid", () -> "standard");
+  }
 }
