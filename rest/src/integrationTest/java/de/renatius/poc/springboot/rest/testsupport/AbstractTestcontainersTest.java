@@ -47,8 +47,8 @@ public abstract class AbstractTestcontainersTest {
     registry.add("spring.datasource.username", POSTGRESQL::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL::getPassword);
     registry.add("spring.mongodb.uri", MONGODB::getConnectionString);
-    registry.add("spring.data.mongodb.uri", MONGODB::getConnectionString);
-    registry.add("spring.data.mongodb.database", () -> "test");
+    registry.add("spring.mongodb.database", () -> "test");
+    registry.add("spring.mongodb.representation.uuid", () -> "standard");
     registry.add("app.security.enabled", () -> "false");
   }
 
