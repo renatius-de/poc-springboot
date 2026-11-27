@@ -2,21 +2,22 @@ package de.renatius.poc.springboot.data.testsupport;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
+@Testcontainers
 public abstract class AbstractTestcontainersTest {
 
+  @Container
   protected static final PostgreSQLContainer POSTGRESQL =
       new PostgreSQLContainer("postgres:18-alpine");
 
+  @Container
+  @SuppressWarnings("resource")
   protected static final MongoDBContainer MONGODB =
       new MongoDBContainer("mongo:8").withReplicaSet();
-
-  static {
-    POSTGRESQL.start();
-    MONGODB.start();
-  }
 
   @SuppressWarnings("unused")
   @DynamicPropertySource

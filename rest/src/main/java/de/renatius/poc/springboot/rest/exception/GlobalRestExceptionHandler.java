@@ -2,16 +2,16 @@ package de.renatius.poc.springboot.rest.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import java.net.URI;
+import java.time.Instant;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import java.net.URI;
-import java.time.Instant;
-import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -92,7 +92,7 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     if (exception instanceof DataIntegrityViolationException) {
       return "Request violates a data constraint";
     }
-    return exception.getMessage();
+    return exception.getMessage() != null ? exception.getMessage() : "The request is invalid";
   }
 
   private static void enrich(ProblemDetail problem) {

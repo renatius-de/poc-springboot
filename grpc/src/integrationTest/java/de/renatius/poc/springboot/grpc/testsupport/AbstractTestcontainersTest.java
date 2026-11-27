@@ -1,9 +1,14 @@
 package de.renatius.poc.springboot.grpc.testsupport;
 
+import de.renatius.poc.springboot.grpc.GrpcApplication;
+import io.grpc.BindableService;
+import io.grpc.ManagedChannel;
+import io.grpc.Server;
+import io.grpc.inprocess.InProcessChannelBuilder;
+import io.grpc.inprocess.InProcessServerBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
-
-import de.renatius.poc.springboot.grpc.GrpcApplication;
-import io.grpc.BindableService;
-import io.grpc.ManagedChannel;
-import io.grpc.Server;
-import io.grpc.inprocess.InProcessChannelBuilder;
-import io.grpc.inprocess.InProcessServerBuilder;
 
 @SpringBootTest(
     classes = GrpcApplication.class,
@@ -31,19 +31,17 @@ import io.grpc.inprocess.InProcessServerBuilder;
             + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoRepositoriesAutoConfiguration")
 @Transactional
 @ActiveProfiles("postgresql")
+@Testcontainers
 public abstract class AbstractTestcontainersTest {
 
+  @Container
   protected static final PostgreSQLContainer POSTGRESQL =
       new PostgreSQLContainer("postgres:18-alpine");
+  @Container
+  @SuppressWarnings("resource")
   protected static final MongoDBContainer MONGODB =
       new MongoDBContainer("mongo:8").withReplicaSet();
 
-  static {
-    POSTGRESQL.start();
-    MONGODB.start();
-  }
-
-  @SuppressWarnings("unused")
   @DynamicPropertySource
   static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
@@ -66,7 +64,6 @@ public abstract class AbstractTestcontainersTest {
 
   private Server server;
 
-  @SuppressWarnings("unused")
   @BeforeEach
   void startInProcessServer() throws IOException {
     String serverName = InProcessServerBuilder.generateName();
@@ -76,7 +73,6 @@ public abstract class AbstractTestcontainersTest {
     channel = InProcessChannelBuilder.forName(serverName).directExecutor().build();
   }
 
-  @SuppressWarnings("unused")
   @AfterEach
   void stopInProcessServer() throws InterruptedException {
     if (channel != null) {

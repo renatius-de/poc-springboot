@@ -41,6 +41,7 @@ subprojects {
             dependency("org.testcontainers:testcontainers-postgresql:2.0.5")
             dependency("org.testcontainers:testcontainers-mongodb:2.0.5")
             dependency("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.34.0")
+            dependency("com.google.code.findbugs:jsr305:3.0.2")
             dependency("org.mapstruct:mapstruct:1.6.3")
             dependency("org.mapstruct:mapstruct-processor:1.6.3")
             dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
@@ -82,6 +83,8 @@ subprojects {
         configurations["implementation"],
         configurations["testImplementation"]
     )
+    configurations["testCompileOnly"].extendsFrom(configurations["compileOnlyApi"])
+    configurations["integrationTestCompileOnly"].extendsFrom(configurations["compileOnlyApi"])
     configurations["integrationTestRuntimeOnly"].extendsFrom(
         configurations["runtimeOnly"],
         configurations["testRuntimeOnly"]

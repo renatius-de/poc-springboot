@@ -22,40 +22,38 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("mongodb")
 class MongoRepositoryIT extends AbstractTestcontainersTest {
 
-  @Autowired private ProfessorMongoRepository professorRepository;
-  @Autowired private CourseMongoRepository courseRepository;
-  @Autowired private StudentMongoRepository studentRepository;
+    @Autowired
+    private ProfessorMongoRepository professorRepository;
+    @Autowired
+    private CourseMongoRepository courseRepository;
+    @Autowired
+    private StudentMongoRepository studentRepository;
 
-  @BeforeEach
-  void clearRepositories() {
-    studentRepository.deleteAll();
-    courseRepository.deleteAll();
-    professorRepository.deleteAll();
-  }
+    @BeforeEach
+    void clearRepositories() {
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        professorRepository.deleteAll();
+    }
 
-  @Test
-  void shouldPersistAndReadDocumentsWithUuidIdsAndRelationships() {
-    UUID professorId = UUID.randomUUID();
-    UUID courseId = UUID.randomUUID();
-    UUID studentId = UUID.randomUUID();
+    @Test
+    void shouldPersistAndReadDocumentsWithUuidIdsAndRelationships() {
+        UUID professorId = UUID.randomUUID();
+        UUID courseId = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
 
-    professorRepository.save(
-        new ProfessorDocument(professorId, "Dr.", "Ada", "Lovelace"));
-    courseRepository.save(new CourseDocument(courseId, "Algorithms", "A-101", professorId));
-    studentRepository.save(
-        new StudentDocument(studentId, "Alan", "Turing", Set.of(courseId)));
+        professorRepository.save(
+                new ProfessorDocument(professorId, "Dr.", "Ada", "Lovelace"));
+        courseRepository.save(new CourseDocument(courseId, "Algorithms", "A-101", professorId));
+        studentRepository.save(
+                new StudentDocument(studentId, "Alan", "Turing", Set.of(courseId)));
 
-    assertThat(professorRepository.findById(professorId))
-        .get()
-        .extracting(ProfessorDocument::getLastName)
-        .isEqualTo("Lovelace");
-    assertThat(courseRepository.findById(courseId))
-        .get()
-        .extracting(CourseDocument::getProfessorId)
-        .isEqualTo(professorId);
-    assertThat(studentRepository.findById(studentId))
-        .get()
-        .extracting(StudentDocument::getCourseIds)
-        .isEqualTo(Set.of(courseId));
-  }
+        assertThat(professorRepository.findById(professorId))
+                .hasValueSatisfying(
+                        professor -> assertThat(professor.getLastName()).isEqualTo("Lovelace"));
+        assertThat(courseRepository.findById(courseId))
+                .hasValueSatisfying(course -> assertThat(course.getProfessorId()).isEqualTo(professorId));
+        assertThat(studentRepository.findById(studentId))
+                .hasValueSatisfying(student -> assertThat(student.getCourseIds()).isEqualTo(Set.of(courseId)));
+    }
 }

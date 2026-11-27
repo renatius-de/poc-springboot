@@ -1,10 +1,19 @@
 {
-  "java.import.gradle.enabled": true,
   "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.enabled": true,
   "java.import.gradle.wrapper.enabled": true,
   "java.import.gradle.version": "wrapper",
   "java.import.gradle.offline.enabled": false,
   "java.import.maven.enabled": false,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.sources.organizeImports.starThreshold": 99,
+  "java.sources.organizeImports.staticStarThreshold": 99,
+  "java.format.settings.url": "./.vscode/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "[java]": {
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false
+  },
   "files.watcherExclude": {
     "**/build/**": true,
     "**/.gradle/**": true
@@ -12,13 +21,5 @@
   "search.exclude": {
     "**/build/**": true,
     "**/.gradle/**": true
-  },
-  "java.compile.nullAnalysis.mode": "automatic",
-  "java.completion.importOrder": [
-    "#",
-    "de.renatius",
-    ""
-  ],
-  "java.sources.organizeImports.starThreshold": 99,
-  "java.sources.organizeImports.staticStarThreshold": 99
+  }
 }

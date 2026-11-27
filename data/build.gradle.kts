@@ -8,7 +8,8 @@ dependencies {
     api("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations")
     api("io.opentelemetry:opentelemetry-api")
 
-    compileOnly("io.swagger.core.v3:swagger-annotations-jakarta")
+    compileOnlyApi("io.swagger.core.v3:swagger-annotations-jakarta")
+    compileOnlyApi("com.google.code.findbugs:jsr305")
 
     runtimeOnly("org.postgresql:postgresql")
 

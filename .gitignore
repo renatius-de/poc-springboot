@@ -29,4 +29,5 @@
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/extensions.json
+!.vscode/eclipse-java-google-style.xml
 deployment/results/

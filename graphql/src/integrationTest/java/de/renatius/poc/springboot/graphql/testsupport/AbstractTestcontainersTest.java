@@ -5,6 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
@@ -18,20 +20,18 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
       "spring.graphql.schema.locations=classpath*:graphql/"
     })
 @ActiveProfiles("postgresql")
+@Testcontainers
 public abstract class AbstractTestcontainersTest {
 
+  @Container
   protected static final PostgreSQLContainer POSTGRESQL =
       new PostgreSQLContainer("postgres:18-alpine");
 
+  @Container
+  @SuppressWarnings("resource")
   protected static final MongoDBContainer MONGODB =
       new MongoDBContainer("mongo:8").withReplicaSet();
 
-  static {
-    POSTGRESQL.start();
-    MONGODB.start();
-  }
-
-  @SuppressWarnings("unused")
   @DynamicPropertySource
   static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
