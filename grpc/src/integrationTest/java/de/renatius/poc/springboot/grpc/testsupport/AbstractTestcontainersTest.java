@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.grpc.testsupport;
 
 import de.renatius.poc.springboot.grpc.GrpcApplication;
+import de.renatius.poc.springboot.testsupport.AbstractPostgresMongoTestcontainersTest;
 import io.grpc.BindableService;
 import io.grpc.ManagedChannel;
 import io.grpc.Server;
@@ -17,10 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.mongodb.MongoDBContainer;
-import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @SpringBootTest(
     classes = GrpcApplication.class,
@@ -28,22 +25,21 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
         "spring.autoconfigure.exclude="
             + "org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration,"
             + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoAutoConfiguration,"
-            + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoRepositoriesAutoConfiguration")
+            + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoRepositoriesAutoConfiguration,"
+            + "server.port=0,"
+            + "management.server.port=0,"
+            + "spring.grpc.server.port=0")
 @Transactional
 @ActiveProfiles("postgresql")
-@Testcontainers
-public abstract class AbstractTestcontainersTest {
+public abstract class AbstractTestcontainersTest extends AbstractPostgresMongoTestcontainersTest {
 
-  @Container
-  protected static final PostgreSQLContainer POSTGRESQL =
-      new PostgreSQLContainer("postgres:18-alpine");
-  @Container
-  @SuppressWarnings("resource")
-  protected static final MongoDBContainer MONGODB =
-      new MongoDBContainer("mongo:8").withReplicaSet();
+  private final List<BindableService> bindableServices;
 
+  protected ManagedChannel channel;
+
+  @SuppressWarnings("unused")
   @DynamicPropertySource
-  static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
+  static void registerApplicationProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRESQL::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL::getPassword);
@@ -52,10 +48,6 @@ public abstract class AbstractTestcontainersTest {
     registry.add("spring.mongodb.representation.uuid", () -> "standard");
     registry.add("app.security.enabled", () -> "false");
   }
-
-  private final List<BindableService> bindableServices;
-
-  protected ManagedChannel channel;
 
   @Autowired
   public AbstractTestcontainersTest(List<BindableService> bindableServices) {

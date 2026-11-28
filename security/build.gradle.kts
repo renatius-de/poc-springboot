@@ -15,4 +15,5 @@ dependencies {
     testImplementation("org.springframework:spring-webmvc")
     testImplementation("jakarta.servlet:jakarta.servlet-api")
     testImplementation("io.grpc:grpc-api")
+    testImplementation(project(":test-utils"))
 }

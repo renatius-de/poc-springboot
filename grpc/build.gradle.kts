@@ -26,6 +26,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core")
     testImplementation("io.grpc:grpc-testing")
     testImplementation("io.grpc:grpc-inprocess")
+    testImplementation(project(":test-utils"))
 }
 
 protobuf {

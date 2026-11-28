@@ -12,7 +12,7 @@ import de.renatius.poc.springboot.data.entity.Student;
 import de.renatius.poc.springboot.data.mapper.CourseMapper;
 import de.renatius.poc.springboot.data.mapper.ProfessorMapper;
 import de.renatius.poc.springboot.data.mapper.StudentMapper;
-import de.renatius.poc.springboot.data.testsupport.AbstractTestcontainersTest;
+import de.renatius.poc.springboot.testsupport.AbstractPostgresMongoTestcontainersTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(classes = TestDataApplication.class)
 @Transactional
-class RepositoryIT extends AbstractTestcontainersTest {
+class RepositoryIT extends AbstractPostgresMongoTestcontainersTest {
 
   @Autowired private ProfessorRepository professorRepository;
   @Autowired private CourseRepository courseRepository;
