@@ -1,4 +1,4 @@
-package de.renatius.poc.springboot.data.testsupport;
+package de.renatius.poc.springboot.testsupport;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -8,7 +8,7 @@ import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @Testcontainers
-public abstract class AbstractTestcontainersTest {
+public abstract class AbstractPostgresMongoTestcontainersTest {
 
   @Container
   protected static final PostgreSQLContainer POSTGRESQL =
@@ -29,5 +29,6 @@ public abstract class AbstractTestcontainersTest {
     registry.add("spring.data.mongodb.uri", MONGODB::getConnectionString);
     registry.add("spring.mongodb.database", () -> "test");
     registry.add("spring.mongodb.representation.uuid", () -> "standard");
+    registry.add("app.security.enabled", () -> "false");
   }
 }

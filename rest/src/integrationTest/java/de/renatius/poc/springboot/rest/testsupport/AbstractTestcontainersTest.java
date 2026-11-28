@@ -1,6 +1,7 @@
 package de.renatius.poc.springboot.rest.testsupport;
 
 import de.renatius.poc.springboot.rest.RestApplication;
+import de.renatius.poc.springboot.testsupport.AbstractPostgresMongoTestcontainersTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,10 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.mongodb.MongoDBContainer;
-import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @SpringBootTest(
     classes = RestApplication.class,
@@ -25,24 +22,15 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
             + "org.springframework.boot.data.mongodb.autoconfigure.DataMongoRepositoriesAutoConfiguration")
 @Transactional
 @ActiveProfiles("postgresql")
-@Testcontainers
-public abstract class AbstractTestcontainersTest {
+public abstract class AbstractTestcontainersTest extends AbstractPostgresMongoTestcontainersTest {
 
   protected MockMvc mockMvc;
 
   @Autowired private WebApplicationContext webApplicationContext;
 
-  @Container
-  protected static final PostgreSQLContainer POSTGRESQL =
-      new PostgreSQLContainer("postgres:18-alpine");
-  @Container
-  @SuppressWarnings ("resource")
-  protected static final MongoDBContainer MONGODB =
-      new MongoDBContainer("mongo:8").withReplicaSet();
-
   @SuppressWarnings("unused")
   @DynamicPropertySource
-  static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
+  static void registerApplicationProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", POSTGRESQL::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRESQL::getUsername);
     registry.add("spring.datasource.password", POSTGRESQL::getPassword);

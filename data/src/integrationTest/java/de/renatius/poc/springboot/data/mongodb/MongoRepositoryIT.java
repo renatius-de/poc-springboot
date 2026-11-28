@@ -9,7 +9,7 @@ import de.renatius.poc.springboot.data.mongodb.document.StudentDocument;
 import de.renatius.poc.springboot.data.mongodb.repository.CourseMongoRepository;
 import de.renatius.poc.springboot.data.mongodb.repository.ProfessorMongoRepository;
 import de.renatius.poc.springboot.data.mongodb.repository.StudentMongoRepository;
-import de.renatius.poc.springboot.data.testsupport.AbstractTestcontainersTest;
+import de.renatius.poc.springboot.testsupport.AbstractPostgresMongoTestcontainersTest;
 import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = TestDataApplication.class)
 @ActiveProfiles("mongodb")
-class MongoRepositoryIT extends AbstractTestcontainersTest {
+class MongoRepositoryIT extends AbstractPostgresMongoTestcontainersTest {
 
     @Autowired
     private ProfessorMongoRepository professorRepository;

@@ -21,4 +21,5 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
     testImplementation("org.testcontainers:testcontainers-postgresql")
     testImplementation("org.testcontainers:testcontainers-mongodb")
+    testImplementation(project(":test-utils"))
 }
